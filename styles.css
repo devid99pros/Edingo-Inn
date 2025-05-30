@@ -1,0 +1,625 @@
+body {
+  margin: 0;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: 40px;
+  background: whitesmoke;
+  color: #aa8453;
+  line-height: 1.6;
+}
+h1 {
+  color: #aa8453;
+  text-align: center;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: 40px;
+  margin: 20px 0;
+  /* Animation styles */
+  opacity: 0;
+  transform: translateX(100px);
+  animation: slideInLeft 1s ease-out forwards;
+}
+
+@keyframes slideInLeft {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+
+.booking-container.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.logo{
+  width: 90px;
+  height: 90px;
+  display: inline-block;
+  margin: 20px;
+  
+}
+
+header {
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+              url('/img/premium_photo-1661964071015-d97428970584.avif') no-repeat center center/cover;
+  height: 600px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+
+ 
+.logo img {
+  height: 200px;
+  width: 200px;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+.star-rating {
+  display: inline-block;
+  font-size: 1.5rem;
+  color: #927146; 
+  margin-top: 10px;
+}
+p {
+  font-size: 1.2rem;
+  margin: 20px 0;
+  color: #927146;
+}
+  .booking-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 0; /* Removed border radius */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        .booking-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 20px;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 0; /* Removed border radius */
+            font-size: 16px;
+            font-weight: 600;
+            color: #1f2937;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-input:hover {
+            border-color: #aa8453;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #aa8453;
+            box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+        }
+
+         .check-btn, .discount-btn {
+            padding: 15px 30px;
+            background: #1f2937;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            height: 54px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .check-btn::before, .discount-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,#aa8453, #927146);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        .check-btn:hover::before, .discount-btn:hover::before {
+            left: 0;
+        }
+
+        .check-btn:hover, .discount-btn:hover {
+            color: #1f2937;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Family Discounts Button */
+        .discount-btn {
+            background: none;
+            font-size: 14px;
+            padding: 15px 20px;
+            color:whitesmoke;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-block;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+
+        .discount-btn:hover {
+            color: white;
+            background: #aa8453;
+        }
+        /* Calendar Modal */
+        .calendar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+
+        .calendar-modal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            color: #1f2937;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            max-width: 900px;
+            width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            flex: 1;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 32px;
+            color: #6b7280;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .close-btn:hover {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .calendar-navigation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 40px;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-btn:hover {
+            background: #f3f4f6;
+        }
+
+        .calendars-container {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+        }
+
+        .calendar {
+            flex: 1;
+            max-width: 350px;
+        }
+
+        .calendar-header {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 20px;
+        }
+
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .weekday {
+            padding: 12px 4px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            background: #fef3c7;
+        }
+
+        .calendar-day.other-month {
+            color: #d1d5db;
+        }
+
+        .calendar-day.today {
+            background: #dbeafe;
+            font-weight: 700;
+        }
+
+        .calendar-day.selected {
+            background: #aa8453;
+            color: white;
+            font-weight: 700;
+        }
+
+        .calendar-day.in-range {
+            background: #fef3c7;
+            color: #aa8453;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #f3f4f6;
+        }
+
+        .selected-dates {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .selected-dates strong {
+            color: #1f2937;
+        }
+
+            .confirm-btn {
+                background: #aa8453;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .confirm-btn:hover {
+            background:#aa8453;
+            transform: translateY(-1px);
+        }
+
+        /* Guests Dropdown */
+        .guests-container {
+            position: relative;
+        }
+
+        .guests-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            z-index: 100;
+        }
+
+        .guests-dropdown.show {
+            display: block;
+        }
+
+        .guest-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .guest-row:last-child {
+            border-bottom: none;
+        }
+
+        .guest-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .guest-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .guest-btn {
+            width: 32px;
+            height: 32px;
+            border: 2px solid #aa8453;
+            background: white;
+            color: #aa8453;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+
+        .guest-btn:hover {
+            background: #aa8453;
+            color: white;
+        }
+
+        .guest-btn:disabled {
+            border-color: #d1d5db;
+            color: #d1d5db;
+            cursor: not-allowed;
+        }
+
+        .guest-btn:disabled:hover {
+            background: white;
+            color: #d1d5db;
+        }
+
+        .guest-count {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1f2937;
+            min-width: 20px;
+            text-align: center;
+        }
+        .icon {
+            width: 16px;
+            height: 16px;
+            fill: #aa8453;
+        }
+
+        .arrow {
+            width: 20px;
+            height: 20px;
+            fill: #6b7280;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .booking-form {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .calendars-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .calendar-modal {
+                padding: 20px;
+                width: 95vw;
+            }
+        }
+       .offer-section {
+      padding: 80px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .subtitle {
+      color: #aa8453;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .offer-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      color: #333;
+      margin-bottom: 50px;
+      font-weight: 600;
+    }
+
+    .offer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px; 
+      margin-top: 40px;
+    }
+
+    .offer-card {
+      position: relative;
+      height: 300px;
+      border-radius: 0; /* No border radius */
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      background-size: cover;
+      background-position: center;
+      margin: 0;
+      /* Remove zoom on hover, keep image fixed */
+      transition: none;
+    }
+
+    .offer-card:hover {
+      /* Remove zoom effect */
+      transform: none;
+      z-index: 2;
+    }
+
+    .offer-card:nth-child(1) {
+      background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+                  url(/img/offer1.jpg) center/cover;
+    }
+
+    .offer-card:nth-child(2) {
+      background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+                  url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80') center/cover;
+    }
+
+    .offer-card:nth-child(3) {
+      background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+                  url('https://images.unsplash.com/photo-1559508551-44bff1de756b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80') center/cover;
+    }
+
+    .offer-card span {
+      position: absolute;
+      bottom: 70px; /* Adjusted to make space for the button */
+      left: 30px;
+      right: 30px;
+      color: white;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+      line-height: 1.3;
+    }
+
+    .offer-card .discount-btn {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: fit-content;
+      padding: 10px 20px;
+      font-size: 14px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+
+      .booking-form {
+        grid-template-columns: 1fr;
+      }
+
+      .calendars-container {
+        grid-template-columns: 1fr;
+      }
+
+      .offer-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .calendar-modal {
+        width: 95%;
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .booking-container {
+        padding: 20px;
+        margin: 0 10px;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .offer-section h2 {
+        font-size: 2rem;
+      }
+    }
