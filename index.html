@@ -1,46 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hotel Edingo Inn</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script src="script.js" ></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unique Specialty Foods</title>
+    <link rel="stylesheet" href="styles.css">
+  
 </head>
-
 <body>
   <header>
-   <div class="logo">
-    <img src="/img/download.png" alt="Logo" class="logo" />
+
+    <!-- Search Modal -->
+    <div class="search-modal" id="searchModal">
+        <button class="search-close" id="searchClose">×</button>
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Type your search here..." id="searchInput">
+            <div class="search-suggestions">
+                <a href="#" class="search-suggestion">Luxury Rooms</a>
+                <a href="#" class="search-suggestion">Spa Services</a>
+                <a href="#" class="search-suggestion">Restaurant</a>
+                <a href="#" class="search-suggestion">Conference Hall</a>
+                <a href="#" class="search-suggestion">Wedding Venue</a>
+            </div>
+        </div>
     </div>
-  
-        <div class="star-rating">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="#aa8453" stroke="none">
-                <path d="M12 .587l3.668 7.431 8.332 1.21-6.001 5.853 1.416 8.249L12 18.897l-7.415 3.893 1.416-8.249-6.001-5.853 8.332-1.21L12 .587z"/>
-            </svg>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="#aa8453" stroke="none">
-                <path d="M12 .587l3.668 7.431 8.332 1.21-6.001 5.853 1.416 8.249L12 18.897l-7.415 3.893 1.416-8.249-6.001-5.853 8.332-1.21L12 .587z"/>
-            </svg>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="#aa8453" stroke="none">
-                <path d="M12 .587l3.668 7.431 8.332 1.21-6.001 5.853 1.416 8.249L12 18.897l-7.415 3.893 1.416-8.249-6.001-5.853 8.332-1.21L12 .587z"/>
-            </svg>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="#aa8453" stroke="none">
-                <path d="M12 .587l3.668 7.431 8.332 1.21-6.001 5.853 1.416 8.249L12 18.897l-7.415 3.893 1.416-8.249-6.001-5.853 8.332-1.21L12 .587z"/>
-            </svg>
-                <defs>
-                    <clipPath id="half-star-clip" class="half-star-clip">
-                        <rect x="0" y="0" width="12" height="24" fill="#aa8453"/>
-                    </clipPath>
-                </defs>
-                <path d="M12 .587l3.668 7.431 8.332 1.21-6.001 5.853 1.416 8.249L12 18.897l-7.415 3.893 1.416-8.249-6.001-5.853 8.332-1.21L12 .587z" fill="gold" clip-path="url(#half-star-clip)"/>
-            </svg>
+    
+    <nav class="navbar transparent" id="navbar">
+        <div class="nav-container">
+            <!-- Logo at the top left inside the navbar -->
+            <div class="logo-nav">
+                <img src="/img/logo-nav.png" alt="Hotel Edingo Inn Logo" class="logo-image" />
+            </div>
+            <!-- Navigation Menu -->
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#" class="nav-link">HOME</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">PAGES<span class="dropdown-arrow">▼</span></a>
+                    <div class="dropdown-menu">
+                        <a href="#" class="dropdown-item">About Us</a>
+                        <a href="#" class="dropdown-item">Our Team</a>
+                        <a href="#" class="dropdown-item">Gallery</a>
+                        <a href="#" class="dropdown-item">Testimonials</a>
+                        <a href="#" class="dropdown-item">FAQ</a>
+                        <a href="#" class="dropdown-item">Contact Us</a>
+                    </div>
+                </li>
+                <li class="nav-item"><a href="#" class="nav-link">SERVICES</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">ROOMS & SUITES<span class="dropdown-arrow">▼</span></a>
+                    <div class="dropdown-menu">
+                        <a href="#" class="dropdown-item">Deluxe Room</a>
+                        <a href="#" class="dropdown-item">Executive Suite</a>
+                        <a href="#" class="dropdown-item">Presidential Suite</a>
+                        <a href="#" class="dropdown-item">Family Room</a>
+                        <a href="#" class="dropdown-item">Penthouse</a>
+                    </div>
+                </li>
+                <li class="nav-item"><a href="#" class="nav-link">NEWS</a></li>
+            </ul>
+
+            <!-- Right Side -->
+            <div class="nav-icons">
+                <div class="search-icon" id="searchIcon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                    </svg>
+                </div>
+                <div class="menu-toggle">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </nav>
+      <div class="star-rating">
+        <div class="star-icon">
+          <p style="font-size: 30px; color: #aa8453;"> ★ ★ ★ ★ ☆</p>
         </div>
     </div>
 
       <h1>Welcome to Hotel Edingo Inn</h1>
-    <p><strong>You</strong> <a style="font-weight: bold; text-decoration: none; color:bisque" >deserve the five-star comfort.</a></p>
+    <p><strong style="color: #aa8453;">You</strong> <a style="font-weight:lighter; text-decoration: none; color:bisque" >deserve the five-star comfort.</a></p>
       <div class="booking-container">
         <div class="booking-form">
             
@@ -172,24 +213,389 @@
         </div>
     </div>
     </header>
+
+    
+   
      <script src="script.js"></script>
      <section class="offer-section">
+
     <div class="subtitle">WHAT WE OFFER</div>
     <h2>Get Our Special Offer</h2>
     <div class="offer-grid">
       <div class="offer-card">
-        <button>Festival </button>
+        <button class="discount-btn">Festival Discounts</button>
       </div>
       <div class="offer-card">
-        <button>Click Me</button>
+        <button class="discount-btn">Proper Hospitality</button>
       </div>
       <div class="offer-card">
-        <button>Click Me</button>
+        <button class="discount-btn">Buy one Get one</button>
       </div>
     </div>
   </section>
+ <section class="luxury-section">
+        <div class="container">
+            <div class="content-section">
+                <div class="brand">EDINGO INN</div>
+
+                <!-- Centered subtitle above main heading -->
+                <div class="subtitle" style="text-align:center;">WHAT WE PROVIDE</div>
+<h1 class="main-heading" style="text-align:center;">We Provide Outdoor Activities To All Visitors</h1>
+
+                <p class="description">
+                   At Eding Inn, Itahari, we offer more than just a stay — we create experiences. Enjoy thrilling outdoor activities paired with the best lighting ambiance, refreshing swimming options, and top-quality drinks to make your visit truly memorable.
+                </p>
+                
+               <div class="icons-row">
+        <div class="icon-container">
+            <div class="icon lighting">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M7 2v11h3v9l7-12h-4l4-8z"/>
+                </svg>
+            </div>
+            <div class="text">
+                <div class="text-title">The Best</div>
+                <div class="text-subtitle">Lighting</div>
+            </div>
+        </div>
+        
+        <div class="icon-container">
+            <div class="icon swimming">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M2 17c1.5 0 2.5 1 4 1s2.5-1 4-1 2.5 1 4 1 2.5-1 4-1 2.5 1 4 1v2c-1.5 0-2.5-1-4-1s-2.5 1-4 1-2.5-1-4-1-2.5 1-4 1-2.5-1-4-1v-2z"/>
+                    <path d="M2 20c1.5 0 2.5 1 4 1s2.5-1 4-1 2.5 1 4 1 2.5-1 4-1 2.5 1 4 1v2c-1.5 0-2.5-1-4-1s-2.5 1-4 1-2.5-1-4-1-2.5 1-4 1-2.5-1-4-1v-2z"/>
+                    <circle cx="6.5" cy="6.5" r="2.5"/>
+                    <path d="M15.5 9c-1.1 0-2 .9-2 2v4l5.5-2.5V11c0-1.1-.9-2-2-2h-1.5z"/>
+                </svg>
+            </div>
+            <div class="text">
+                <div class="text-title">The Best</div>
+                <div class="text-subtitle">Swimming</div>
+            </div>
+        </div>
+        
+        <div class="icon-container">
+            <div class="icon coffee">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M18.5 3H6c-1.1 0-2 .9-2 2v5.71c0 3.83 2.95 7.18 6.78 7.29 3.96.12 7.22-3.06 7.22-7v-1h.5c1.38 0 2.5-1.12 2.5-2.5S19.88 5 18.5 5V3z"/>
+                    <circle cx="7" cy="7" r="1"/>
+                    <path d="M12 2v2"/>
+                    <path d="M15 2v2"/>
+                    <path d="M9 2v2"/>
+                </svg>
+            </div>
+            <div class="text">
+                <div class="text-title">The Best</div>
+                <div class="text-subtitle">Drinks</div>
+            </div>
+        </div>
+    </div>
 
 
+                <div class="bullet-points">
+                    <div class="bullet-point">
+Elegant outdoor lighting creates a cozy and safe atmosphere for evening activities.                    </div>
+                    <div class="bullet-point">
+                        Clean, spacious pools perfect for both relaxation and fun.
+                    </div>
+                    <div class="bullet-point">
+ A selection of refreshing beverages, including mocktails and chilled soft drinks, served fresh.                    </div>
+                </div>
+                
+                <a href="#" class="cta-button">ABOUT MORE</a>
+            </div>
+            
+            <div class="images-section">
+                <div class="image-large">
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="image-small-top">
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="image-small-bottom">
+                    <div class="image-overlay"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="cart-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="m1 1 4 4 16 1v10l-15 1-2-7"></path>
+        </svg>
+    </div>
 
+    <div class="container">
+     
+
+        <div class="rooms-header">
+    <div class="subtitle">Customer Services</div>
+    <h1 class="rooms-title">Book your stay and relax in Edingo Inn</h1>
+</div><br>
+
+<div class="rooms-grid">
+            <div class="room-card">
+                <div class="room-image royal-theme"></div>
+                <div class="room-content">
+                    <h3 class="room-title">Royal Suite</h3>
+                    <div class="room-price">$199 / Night</div>
+                    
+                    <div class="room-features">
+                        <div class="feature">
+                            <div class="feature-icon">
+                                <svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>
+                            </div>
+                            <span>600 m²</span>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">
+                                <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            </div>
+                            <span>2 Guests</span>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">
+                                <svg viewBox="0 0 24 24"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>
+                            </div>
+                            <span>2 Bed</span>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">
+                                <svg viewBox="0 0 24 24"><path d="M9 2v6h6V2"/><path d="M9 8a3 3 0 0 0-3 3v9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-9a3 3 0 0 0-3-3"/></svg>
+                            </div>
+                            <span>2 Bathroom</span>
+                        </div>
+                    </div>
+
+                    <div class="amenities">
+                        <div class="amenity">
+                            <div class="amenity-icon">
+                                <svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                            </div>
+                            <span>Wifi Available</span>
+                        </div>
+                        <div class="amenity">
+                            <div class="amenity-icon">
+                                <svg viewBox="0 0 24 24"><path d="M8 2h8l4 9H4l4-9Z"/><path d="M16 11v6a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2v-6"/><path d="M12 2v9"/></svg>
+                            </div>
+                            <span>Air Conditioning</span>
+                        </div>
+                    </div>
+                    
+                    <button class="booking-btn">Book Now</button>
+                </div>
+            </div>
+
+            <div class="room-card">
+                <div class="room-image premier-theme"></div>
+                <div class="room-content">
+                    <h3 class="room-title">Premier Room</h3>
+                    <div class="room-price">$299 / Night</div>
+                    
+                    <div class="room-features">
+                        <div class="feature">
+                            <div class="feature-icon">
+                                <svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>
+                            </div>
+                            <span>700 m²</span>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">
+                                <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            </div>
+                            <span>2 Guests</span>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">
+                                <svg viewBox="0 0 24 24"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>
+                            </div>
+                            <span>2 Bed</span>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">
+                                <svg viewBox="0 0 24 24"><path d="M9 2v6h6V2"/><path d="M9 8a3 3 0 0 0-3 3v9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-9a3 3 0 0 0-3-3"/></svg>
+                            </div>
+                            <span>2 Bathroom</span>
+                        </div>
+                    </div>
+
+                    <div class="amenities">
+                        <div class="amenity">
+                            <div class="amenity-icon">
+                                <svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                            </div>
+                            <span>Wifi Available</span>
+                        </div>
+                    </div>
+                    
+                    <button class="booking-btn">Book Now</button>
+                </div>
+            </div>
+
+            <div class="room-card">
+                <div class="room-image skyline-theme"></div>
+                <div class="room-content">
+                    <h3 class="room-title">Skyline Suite</h3>
+                    <div class="room-price">$399 / Night</div>
+                    
+                    <div class="room-features">
+                        <div class="feature">
+                            <div class="feature-icon">
+                                <svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>
+                            </div>
+                            <span>800 m²</span>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">
+                                <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            </div>
+                            <span>2 Guests</span>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">
+                                <svg viewBox="0 0 24 24"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>
+                            </div>
+                            <span>2 Bed</span>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">
+                                <svg viewBox="0 0 24 24"><path d="M9 2v6h6V2"/><path d="M9 8a3 3 0 0 0-3 3v9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-9a3 3 0 0 0-3-3"/></svg>
+                            </div>
+                            <span>2 Bathroom</span>
+                        </div>
+                    </div>
+
+                    <div class="amenities">
+                        <div class="amenity">
+                            <div class="amenity-icon">
+                                <svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                            </div>
+                            <span>Free WIFI</span>
+                        </div>
+                    </div>
+                    
+                    <button class="booking-btn">Book Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+       <div class="subtitle" style="text-align: center;">Edingo Menu</div>
+        <h1 class="main-title">Unique Specialty Foods</h1> 
+    <div class="container"> 
+            
+            <div class="menu-header">
+       
+    </div>
+    <div class="menu-container">
+            <div class="item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfNvTaR6lM9q2dxIM-Izv1j9X_mzAJfs8KIg&s" alt="Pasta With Fish" class="item-image">
+                <div class="item-content">
+                    <p class="item-description">Lorem Ipsum is that it smt</p>
+                    <div class="item-header">
+                        <h3 class="item-name">Pasta With Fish</h3>
+                        <div class="dotted-line"></div>
+                        <div class="item-price">$39</div>
+                    </div>
+                    <span class="item-tag tag-starter">Starter</span>
+                </div>
+            </div>
+            
+            <div class="item">
+                <img src="https://images.unsplash.com/photo-1612874742237-6526221588e3?w=200&h=200&fit=crop" alt="Noodles" class="item-image">
+                <div class="item-content">
+                    <p class="item-description">Lorem Ipsum is that it smt</p>
+                    <div class="item-header">
+                        <h3 class="item-name">Noodles</h3>
+                        <div class="dotted-line"></div>
+                        <div class="item-price">$16+</div>
+                    </div>
+                    <span class="item-tag tag-vegan">Vegan</span>
+                </div>
+            </div>
+            
+            <div class="item">
+                <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop" alt="Fresh Meat" class="item-image">
+                <div class="item-content">
+                    <p class="item-description">Lorem Ipsum is that it smt</p>
+                    <div class="item-header">
+                        <h3 class="item-name">Fresh Meat</h3>
+                        <div class="dotted-line"></div>
+                        <div class="item-price">$26</div>
+                    </div>
+                    <span class="item-tag tag-new">New</span>
+                </div>
+            </div>
+            
+            <div class="item">
+                <img src="https://images.unsplash.com/photo-1598866594230-a7c12756260f?w=200&h=200&fit=crop" alt="Chicken" class="item-image">
+                <div class="item-content">
+                    <p class="item-description">Lorem Ipsum is that it smt</p>
+                    <div class="item-header">
+                        <h3 class="item-name">Chicken</h3>
+                        <div class="dotted-line"></div>
+                        <div class="item-price">$19</div>
+                    </div>
+                    <span class="item-tag tag-new">New</span>
+                </div>
+            </div>
+            
+            <div class="item">
+                <img src="https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=200&h=200&fit=crop" alt="Spaghetti" class="item-image">
+                <div class="item-content">
+                    <p class="item-description">Lorem Ipsum is that it smt</p>
+                    <div class="item-header">
+                        <h3 class="item-name">Spaghetti</h3>
+                        <div class="dotted-line"></div>
+                        <div class="item-price">$37</div>
+                    </div>
+                    <span class="item-tag tag-new">New</span>
+                </div>
+            </div>
+            
+            <div class="item">
+                <img src="https://www.budgetbytes.com/wp-content/uploads/2022/03/Vegetable-Fried-Rice-V2.jpg" alt="Vegetarian Fried" class="item-image">
+                <div class="item-content">
+                    <p class="item-description">Lorem Ipsum is that it smt</p>
+                    <div class="item-header">
+                        <h3 class="item-name">Vegetarian Fried</h3>
+                        <div class="dotted-line"></div>
+                        <div class="item-price">$34</div>
+                    </div>
+                    <span class="item-tag tag-new">New</span>
+                </div>
+            </div>
+            
+            <div class="item">
+                <img src="https://cdn77-s3.lazycatkitchen.com/wp-content/uploads/2021/01/vegan-winter-soup-pot-800x1200.jpg" alt="Vegetarian Soup" class="item-image">
+                <div class="item-content">
+                    <p class="item-description">Lorem Ipsum is that it smt</p>
+                    <div class="item-header">
+                        <h3 class="item-name">Vegetarian Soup</h3>
+                        <div class="dotted-line"></div>
+                        <div class="item-price">$42</div>
+                    </div>
+                    <span class="item-tag tag-gluten-free">Gluten Free</span>
+                </div>
+            </div>
+            
+            <div class="item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1MzoKo_0H6VRXjeVZzUWbRTBXBhXrMBo8qQ&s" alt="Salmon Pasta" class="item-image">
+                <div class="item-content">
+                    <p class="item-description">Lorem Ipsum is that it smt</p>
+                    <div class="item-header">
+                        <h3 class="item-name">Salmon Pasta</h3>
+                        <div class="dotted-line"></div>
+                        <div class="item-price">$71</div>
+                    </div>
+                    <span class="item-tag tag-fish">Fish</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</div>
 </body>
+
 </html>
