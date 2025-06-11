@@ -309,7 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 document.addEventListener('DOMContentLoaded', () => {
     const titles = document.querySelectorAll(
-        '.modal-title, .subtitle, .text-title, .header-title, .room-title'
+        '.modal-title, .subtitle, .text-title, .header-title, .room-title, .main-title'
     );
     titles.forEach(title => title.classList.add('animated-title'));
     const observer = new IntersectionObserver(entries => {
@@ -360,4 +360,153 @@ document.addEventListener('DOMContentLoaded', () => {
         setInterval(nextSlide, 3000);
     }
 
+        // Video content here.....//
+ const videoThumbnail = document.getElementById('videoThumbnail');
+        const mainVideo = document.getElementById('mainVideo');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+
+        // Handle thumbnail click
+        videoThumbnail.addEventListener('click', function() {
+            // Show loading overlay
+            loadingOverlay.style.display = 'flex';
+            
+            // Hide thumbnail
+            videoThumbnail.style.display = 'none';
+            
+            // Show and play video
+            mainVideo.style.display = 'block';
+            
+            // Simulate loading time (remove this in production)
+            setTimeout(() => {
+                loadingOverlay.style.display = 'none';
+                mainVideo.play().catch(e => {
+                    console.log('Video play failed:', e);
+                    // Fallback: just hide loading overlay
+                    loadingOverlay.style.display = 'none';
+                });
+            }, 1000);
+        });
+
+        // Handle video end - show thumbnail again
+        mainVideo.addEventListener('ended', function() {
+            mainVideo.style.display = 'none';
+            videoThumbnail.style.display = 'flex';
+        });
+
+        // Handle video error
+        mainVideo.addEventListener('error', function() {
+            loadingOverlay.style.display = 'none';
+            videoThumbnail.style.display = 'flex';
+            alert('Video could not be loaded. Please check the video URL.');
+        });
+
 });
+// Team Grid Animation
+document.addEventListener('DOMContentLoaded', () => {
+    const teamGrid = document.querySelector('.team-grid');
+    const teamGridOuter = document.querySelector('.team-grid-outer');
+    if (!teamGrid || !teamGridOuter) return;
+
+    let scrollAmount = 0;
+    const speed = 1.5;
+
+    // Clone the team members for infinite scroll
+    const teamMembers = teamGrid.querySelectorAll('.team-member');
+    teamMembers.forEach(member => {
+        const clone = member.cloneNode(true);
+        teamGrid.appendChild(clone);
+    });
+
+    // Set initial styles
+    teamGrid.style.display = 'flex';
+    teamGrid.style.gap = '2rem';
+    teamGrid.style.width = 'max-content';
+    teamGridOuter.style.overflow = 'hidden';
+
+    function autoScroll() {
+        scrollAmount += speed;
+        if (scrollAmount >= teamGrid.scrollWidth / 2) {
+            scrollAmount = 0;
+            teamGrid.style.transition = 'none';
+            teamGridOuter.scrollLeft = 0;
+            teamGrid.offsetHeight; // Force reflow
+            teamGrid.style.transition = '';
+        }
+        teamGridOuter.scrollLeft = scrollAmount;
+        requestAnimationFrame(autoScroll);
+    }
+
+    // Start the animation
+    autoScroll();
+});
+// experice section animation
+ document.addEventListener('DOMContentLoaded', () => {
+            const statsSection = document.querySelector('.stats-section');
+            const statItems = document.querySelectorAll('.stat-item');
+            const statNumbers = document.querySelectorAll('.stat-number');
+
+            // Function to animate number counting
+            function animateCount(element, target, duration) {
+                let start = 0;
+                const increment = target / (duration / 16); // ~60fps
+                let current = 0;
+                const interval = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(interval);
+                    }
+                    element.textContent = Math.round(current);
+                }, 16);
+            }
+
+            // Intersection Observer to trigger animations on scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        statItems.forEach(item => item.classList.add('visible'));
+
+                        statNumbers.forEach(number => {
+                            const target = parseInt(number.getAttribute('data-target'));
+                            animateCount(number, target, 2000); // 2s duration
+                        });
+
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            observer.observe(statsSection);
+        });
+          window.addEventListener('load', () => {
+            const contactWrapper = document.getElementById('contactWrapper');
+            setTimeout(() => {
+                contactWrapper.classList.add('visible');
+            }, 100);
+        });
+
+        // Form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const btn = document.querySelector('.submit-btn');
+            const originalText = btn.textContent;
+            
+            btn.textContent = 'Sending...';
+            btn.style.opacity = '0.7';
+            
+            setTimeout(() => {
+                btn.textContent = 'Message Sent!';
+                btn.style.background = 'linear-gradient(45deg, #4CAF50, #45a049)';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = 'linear-gradient(45deg, #d4b896, #c9a876)';
+                    btn.style.opacity = '1';
+                    document.getElementById('contactForm').reset();
+                }, 2000);
+            }, 1000);
+        });
+
+
+        

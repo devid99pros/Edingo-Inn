@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rooms & Suites - Hotel Edingo Inn</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+         header {
+            background-color: #fff;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo img {
+            height: 100px;
+            width: 100px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 14px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #d4af37;
+            transform: scale(1.1);
+        }
+        /* Hero Section Styles */
+        .hero-section {
+            background-color: #f5f5f5;
+            position: relative;
+            padding: 6rem 0;
+            text-align: center;
+        }
+        .decorative-text {
+            font-size: 1.25rem;
+            color: #d4af37;
+            font-style: italic;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #333;
+        }
+        .breadcrumb {
+            margin-top: 1rem;
+            color: #666;
+        }
+        .breadcrumb a {
+            color: #666;
+            text-decoration: none;
+        }
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Room Card Styles (Shared for Room Grid and Similar Rooms) */
+        .room-card {
+            position: relative;
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Different animations for each room type */
+        .room-card:nth-child(1) { /* Double Room */
+            transform: translateX(-100px);
+        }
+        .room-card:nth-child(2) { /* Triple Room */
+            transform: translateY(100px);
+        }
+        .room-card:nth-child(3) { /* Deluxe Room */
+            transform: translateX(100px);
+        }
+        .room-card:nth-child(4) { /* Junior Suite */
+            transform: translateY(-100px);
+        }
+        .room-card:nth-child(5) { /* Family Room */
+            transform: scale(0.8);
+        }
+
+        .room-card.visible {
+            opacity: 1;
+            transform: translate(0) scale(1);
+        }
+
+        .room-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .room-card:hover .room-image {
+            transform: scale(1.1) rotate(1deg);
+        }
+
+        .room-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 2rem;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(20px);
+        }
+
+        .room-card:hover .room-overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .room-title {
+            color: #fff;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-family: 'Poppins', sans-serif;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
+        }
+
+        .room-card:hover .room-title {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .room-price {
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            font-family: 'Poppins', sans-serif;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+        }
+
+        .room-card:hover .room-price {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .room-amenities {
+            color: #fff;
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+        }
+
+        .room-card:hover .room-amenities {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .book-now-btn {
+            background: transparent;
+            border: 2px solid #fff;
+            color: #fff;
+            padding: 0.5rem 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Poppins', sans-serif;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.4s;
+        }
+
+        .room-card:hover .book-now-btn {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .book-now-btn:hover {
+            background: #aa8453;
+            border-color: #aa8453;
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(170, 132, 83, 0.3);
+        }
+
+        /* Icons Section Styles */
+        .amenities-section {
+            text-align: center;
+            padding: 2rem 0;
+        }
+        .amenity-icon {
+            font-size: 2rem;
+            color: #666;
+            margin: 0 1rem;
+            transition: color 0.3s ease;
+        }
+        .amenity-icon:hover {
+            color: #aa8453;
+        }
+
+        /* Around the Room Section Styles */
+        .around-room-section {
+            padding: 4rem 0;
+        }
+        .around-room-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .around-room-label {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        /* Carousel Styles for Similar Rooms */
+        .similar-rooms-carousel {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+        .carousel-slide {
+            display: flex;
+            width: fit-content; /* Adjust width to fit all cards */
+            transition: transform 1s ease-in-out;
+        }
+        .carousel-slide .room-card {
+            flex: 0 0 33.33%; /* 3 cards visible at a time */
+            max-width: 33.33%;
+        }
+
+        /* footer section*/
+        footer {
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 50px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #d4af37;
+        }
+
+        .footer-column p,
+        .footer-column a {
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.6;
+            text-decoration: none;
+        }
+
+        .footer-column a:hover {
+            color: #d4af37;
+        }
+
+        .footer-column ul {
+            list-style: none;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: footerLinksUp 1s 1.2s cubic-bezier(0.4,0,0.2,1) forwards;
+        }
+        @keyframes footerLinksUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .footer-column ul li {
+            margin-bottom: 10px;
+            transition: transform 0.2s, color 0.2s;
+        }
+        .footer-column ul li:hover {
+            color: #d4af37;
+            transform: translateX(8px) scale(1.05);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .social-icons a {
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .social-icons a:hover {
+            color: #d4af37;
+        }
+
+        .subscribe input {
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .subscribe button {
+            background-color: #d4af37;
+            border: none;
+            padding: 10px;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding: 20px;
+            background-color: #111;
+            color: #ccc;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div id="global-loader" style="position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+        <div style="display:flex;gap:10px;margin-bottom:10px;">
+            <div style="width:15px;height:15px;background:#ccc;border-radius:50%;animation:fade 1.5s infinite;"></div>
+            <div style="width:15px;height:15px;background:#ccc;border-radius:50%;animation:fade 1.5s infinite 0.3s;"></div>
+            <div style="width:15px;height:15px;background:#ccc;border-radius:50%;animation:fade 1.5s infinite 0.6s;"></div>
+        </div>
+        <div style="font-size:48px;color:#fff;text-transform:uppercase;letter-spacing:5px;font-weight:bold;">LOADING</div>
+        <img src="/img/footer.logo.png" alt="Footer Logo" style="width:100px;margin-top:30px;">
+    </div>
+    <header>
+        <div class="logo">
+            <img src="/img/logo-nav.png" alt="Edingo Inn Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="service.html">Services</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="news.html">News</a></li>
+            </ul>
+        </nav>
+    </header><!-- Hero Section -->
+    <section class="hero-section">
+        <div class="decorative-text">HOTEL EDINGO ROOMS</div>
+        <h1 class="hero-title">Luxury Rooms & Suites</h1>
+        <nav class="breadcrumb">
+            <a href="index.html">Home</a> > <span>Rooms</span>
+        </nav>  
+    </section>
+
+    <!-- Rooms Section -->
+    <section class="py-16 px-4">
+        <div class="container mx-auto">
+            <!-- First Row: Double, Triple, Deluxe -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <!-- Double Room (Side) -->
+                <div class="room-card md:col-span-1">
+                    <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=2070&auto=format&fit=crop" alt="Double Room" class="room-image">
+                    <div class="room-overlay">
+                        <h3 class="room-title">Double Room</h3>
+                        <p class="room-price">$299/Night</p>
+                        <div class="room-amenities">
+                            <i class="fas fa-bed"></i>
+                            <i class="fas fa-tv"></i>
+                            <i class="fas fa-wifi"></i>
+                        </div>
+                        <button class="book-now-btn">Book Now</button>
+                    </div>
+                </div>
+
+                <!-- Triple Room (Middle, Wider) -->
+                <div class="room-card md:col-span-2">
+                    <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=2070&auto=format&fit=crop" alt="Triple Room" class="room-image">
+                    <div class="room-overlay">
+                        <h3 class="room-title">Triple Room</h3>
+                        <p class="room-price">$399/Night</p>
+                        <div class="room-amenities">
+                            <i class="fas fa-bed"></i>
+                            <i class="fas fa-tv"></i>
+                            <i class="fas fa-wifi"></i>
+                        </div>
+                        <button class="book-now-btn">Book Now</button>
+                    </div>
+                </div>
+
+                <!-- Deluxe Room (Side) -->
+                <div class="room-card md:col-span-1">
+                    <img src="https://images.unsplash.com/photo-1591088398332-8a7791972843?q=80&w=2070&auto=format&fit=crop" alt="Deluxe Room" class="room-image">
+                    <div class="room-overlay">
+                        <h3 class="room-title">Deluxe Room</h3>
+                        <p class="room-price">$499/Night</p>
+                        <div class="room-amenities">
+                            <i class="fas fa-bed"></i>
+                            <i class="fas fa-tv"></i>
+                            <i class="fas fa-wifi"></i>
+                        </div>
+                        <button class="book-now-btn">Book Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Second Row: Junior Suite, Family Room -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Junior Suite -->
+                <div class="room-card">
+                    <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=2074&auto=format&fit=crop" alt="Junior Suite" class="room-image">
+                    <div class="room-overlay">
+                        <h3 class="room-title">Junior Suite</h3>
+                        <p class="room-price">$599/Night</p>
+                        <div class="room-amenities">
+                            <i class="fas fa-bed"></i>
+                            <i class="fas fa-tv"></i>
+                            <i class="fas fa-wifi"></i>
+                        </div>
+                        <button class="book-now-btn">Book Now</button>
+                    </div>
+                </div>
+
+                <!-- Family Room -->
+                <div class="room-card">
+                    <img src="https://images.unsplash.com/photo-1590490359683-658d3d23f972?q=80&w=2074&auto=format&fit=crop" alt="Family Room" class="room-image">
+                    <div class="room-overlay">
+                        <h3 class="room-title">Family Room</h3>
+                        <p class="room-price">$899/Night</p>
+                        <div class="room-amenities">
+                            <i class="fas fa-bed"></i>
+                            <i class="fas fa-tv"></i>
+                            <i class="fas fa-wifi"></i>
+                        </div>
+                        <button class="book-now-btn">Book Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Amenities Icons Section -->
+    <section class="amenities-section">
+        <div class="container mx-auto flex justify-center gap-6">
+            <i class="fas fa-bed amenity-icon" title="Comfortable Beds"></i>
+            <i class="fas fa-tv amenity-icon" title="Smart TV"></i>
+            <i class="fas fa-wifi amenity-icon" title="Free Wi-Fi"></i>
+            <i class="fas fa-shower amenity-icon" title="Luxury Bathroom"></i>
+            <i class="fas fa-coffee amenity-icon" title="Coffee Maker"></i>
+        </div>
+    </section>
+
+    <!-- Around the Room Section -->
+    <section class="around-room-section">
+        <h2 class="around-room-title">Around the Room</h2>
+        <div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+            <!-- Image 1: Private Bedroom -->
+            <div class="room-card">
+                <img src="https://images.unsplash.com/photo-1740446568792-647ddb3f6f9a?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Private Bedroom" class="room-image">
+                <p class="around-room-label">Private Bedroom</p>
+            </div>
+            <!-- Image 2: Spa Room -->
+            <div class="room-card">
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop" alt="Spa Room" class="room-image">
+                <p class="around-room-label">Spa Room</p>
+            </div>
+            <!-- Image 3: Gym Room -->
+            <div class="room-card">
+                <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop" alt="Gym Room" class="room-image">
+                <p class="around-room-label">Gym Room</p>
+            </div>
+            <!-- Image 4: Hotel Lounge -->
+            <div class="room-card">
+                <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=2070&auto=format&fit=crop" alt="Hotel Lounge" class="room-image">
+                <p class="around-room-label">Hotel Lounge</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Similar Rooms Section (Carousel) -->
+    <section class="py-16 px-4">
+        <h2 class="around-room-title">Similar Rooms</h2>
+        <div class="container mx-auto">
+            <div class="similar-rooms-carousel">
+                <div class="carousel-slide">
+                    <!-- Double Room -->
+                    <div class="room-card">
+                        <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=2070&auto=format&fit=crop" alt="Double Room" class="room-image">
+                        <div class="room-overlay">
+                            <h3 class="room-title">Double Room</h3>
+                            <p class="room-price">$299/Night</p>
+                            <div class="room-amenities">
+                                <i class="fas fa-bed"></i>
+                                <i class="fas fa-tv"></i>
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <button class="book-now-btn">Book Now</button>
+                        </div>
+                    </div>
+
+                    <!-- Junior Suite -->
+                    <div class="room-card">
+                        <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=2074&auto=format&fit=crop" alt="Junior Suite" class="room-image">
+                        <div class="room-overlay">
+                            <h3 class="room-title">Junior Suite</h3>
+                            <p class="room-price">$599/Night</p>
+                            <div class="room-amenities">
+                                <i class="fas fa-bed"></i>
+                                <i class="fas fa-tv"></i>
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <button class="book-now-btn">Book Now</button>
+                        </div>
+                    </div>
+
+                    <!-- Family Room -->
+                    <div class="room-card">
+                        <img src="https://images.unsplash.com/photo-1590490359683-658d3d23f972?q=80&w=2074&auto=format&fit=crop" alt="Family Room" class="room-image">
+                        <div class="room-overlay">
+                            <h3 class="room-title">Family Room</h3>
+                            <p class="room-price">$899/Night</p>
+                            <div class="room-amenities">
+                                <i class="fas fa-bed"></i>
+                                <i class="fas fa-tv"></i>
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <button class="book-now-btn">Book Now</button>
+                        </div>
+                    </div>
+
+                    <!-- Deluxe Room -->
+                    <div class="room-card">
+                        <img src="https://images.unsplash.com/photo-1591088398332-8a7791972843?q=80&w=2070&auto=format&fit=crop" alt="Deluxe Room" class="room-image">
+                        <div class="room-overlay">
+                            <h3 class="room-title">Deluxe Room</h3>
+                            <p class="room-price">$499/Night</p>
+                            <div class="room-amenities">
+                                <i class="fas fa-bed"></i>
+                                <i class="fas fa-tv"></i>
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <button class="book-now-btn">Book Now</button>
+                        </div>
+                    </div>
+
+                    <!-- Skyline Suite -->
+                    <div class="room-card">
+                        <img src="https://images.unsplash.com/photo-1616046229478-9901c5536a45?q=80&w=2070&auto=format&fit=crop" alt="Skyline Suite" class="room-image">
+                        <div class="room-overlay">
+                            <h3 class="room-title">Skyline Suite</h3>
+                            <p class="room-price">$699/Night</p>
+                            <div class="room-amenities">
+                                <i class="fas fa-bed"></i>
+                                <i class="fas fa-tv"></i>
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <button class="book-now-btn">Book Now</button>
+                        </div>
+                    </div>
+
+                    <!-- Triple Room -->
+                    <div class="room-card">
+                        <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=2070&auto=format&fit=crop" alt="Triple Room" class="room-image">
+                        <div class="room-overlay">
+                            <h3 class="room-title">Triple Room</h3>
+                            <p class="room-price">$399/Night</p>
+                            <div class="room-amenities">
+                                <i class="fas fa-bed"></i>
+                                <i class="fas fa-tv"></i>
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <button class="book-now-btn">Book Now</button>
+                        </div>
+                    </div>
+
+                    <!-- Duplicate for seamless looping -->
+                    <div class="room-card">
+                        <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=2070&auto=format&fit=crop" alt="Double Room" class="room-image">
+                        <div class="room-overlay">
+                            <h3 class="room-title">Double Room</h3>
+                            <p class="room-price">$299/Night</p>
+                            <div class="room-amenities">
+                                <i class="fas fa-bed"></i>
+                                <i class="fas fa-tv"></i>
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <button class="book-now-btn">Book Now</button>
+                        </div>
+                    </div>
+
+                    <div class="room-card">
+                        <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=2074&auto=format&fit=crop" alt="Junior Suite" class="room-image">
+                        <div class="room-overlay">
+                            <h3 class="room-title">Junior Suite</h3>
+                            <p class="room-price">$599/Night</p>
+                            <div class="room-amenities">
+                                <i class="fas fa-bed"></i>
+                                <i class="fas fa-tv"></i>
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <button class="book-now-btn">Book Now</button>
+                        </div>
+                    </div>
+
+                    <div class="room-card">
+                        <img src="https://images.unsplash.com/photo-1590490359683-658d3d23f972?q=80&w=2074&auto=format&fit=crop" alt="Family Room" class="room-image">
+                        <div class="room-overlay">
+                            <h3 class="room-title">Family Room</h3>
+                            <p class="room-price">$899/Night</p>
+                            <div class="room-amenities">
+                                <i class="fas fa-bed"></i>
+                                <i class="fas fa-tv"></i>
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <button class="book-now-btn">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Intersection Observer for scroll animation
+        const roomCards = document.querySelectorAll('.room-card');
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.3
+        });
+
+        roomCards.forEach(card => {
+            observer.observe(card);
+        });
+
+        // Carousel Auto-Swipe for Similar Rooms
+        const carouselSlide = document.querySelector('.carousel-slide');
+        const totalRooms = 6; // Total unique rooms
+        let currentIndex = 0;
+
+        function updateCarousel() {
+            currentIndex++;
+            if (currentIndex >= totalRooms) {
+                currentIndex = 0;
+                carouselSlide.style.transition = 'none'; // Disable transition for instant reset
+                carouselSlide.style.transform = `translateX(0%)`;
+                // Force reflow to restart animation
+                void carouselSlide.offsetWidth;
+                carouselSlide.style.transition = 'transform 1s ease-in-out';
+            }
+            carouselSlide.style.transform = `translateX(-${(currentIndex * 100) / 3}%)`; // 3 cards visible at a time
+        }
+
+        updateCarousel(); // Initial update
+        setInterval(updateCarousel, 3000); // Auto-swipe every 3 seconds
+
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                var loader = document.getElementById('global-loader');
+                if (loader) loader.style.display = 'none';
+            }, 1200);
+        });
+    </script>
+</body>
+<footer>
+        <div class="footer-column">
+            <h3>Edingo Inn</h3>
+            <p>Feel free to reach out if you want to collaborate with us, or chat.</p>
+            <div class="subscribe">
+                <input type="email" placeholder="Your Email">
+                <button><i class="fas fa-paper-plane"></i></button>
+            </div>
+            <h3>Follow Us</h3>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-tiktok"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+        <div class="footer-column">
+            <h3>Service</h3>
+            <ul>
+                <li><a href="#">Store Directory</a></li>
+                <li><a href="#">Top Hotels</a></li>
+                <li><a href="#">Quick Links</a></li>
+                <li><a href="#">Important Links</a></li>
+                <li><a href="#">Insights</a></li>
+                <li><a href="#">Knowledge Center</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3>Company</h3>
+            <ul class="footer-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="service.html">Services</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="news.html">News</a></li>
+            </ul>
+          
+        </div>
+        <div class="footer-column">
+            <h3>New York</h3>
+            <p>2948 Royal Ln, Mesa, New Jersey 456463</p>
+            <p>(000)222-0000</p>
+            <p>info@yourwebsite.com</p>
+            <h3>London</h3>
+            <p>1901 Thornrich Cir, Shiloh, Hawaii 81063</p>
+            <p>(229)555-0109</p>
+            <p>info@yourwebsite.com</p>
+        </div>
+    </footer>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loading Page</title>
+  
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #000;
+      font-family: Arial, sans-serif;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .loader-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .dots {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .dot {
+      width: 15px;
+      height: 15px;
+      background-color: #ccc;
+      border-radius: 50%;
+      animation: fade 1.5s infinite;
+    }
+
+    .dot:nth-child(2) {
+      animation-delay: 0.3s;
+    }
+
+    .dot:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+
+    @keyframes fade {
+      0%, 100% {
+        opacity: 0.3;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+
+    .loading-text {
+      font-size: 48px;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      font-weight: bold;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 20px;
+    }
+
+    footer img {
+      width: 100px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="loader-container">
+    <div class="dots">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+    <div class="loading-text">LOADING</div>
+  </div>
+  <footer>
+    <img src="/img/footer.logo.png" alt="Footer Logo">
+  </footer>
+
+  <script>
+    // Simulate loading process
+    window.onload = function() {
+      setTimeout(function() {
+        console.log("Loading complete!");
+        // Example: window.location.href = "main.html";
+      }, 3000);
+    };
+  </script>
+</body>
+</html>

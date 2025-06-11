@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Room - Hotel Edingo Inn</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        header {
+            background-color: #fff;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo img {
+            height: 100px;
+            width: 100px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 14px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #d4af37;
+            transform: scale(1.1);
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            position: relative;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .decorative-text {
+            font-size: 1.25rem;
+            color: #d4af37;
+            font-style: italic;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .room-details-section {
+            padding: 3rem 0;
+            background: #fff;
+        }
+
+        .room-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .room-specs {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .spec-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .spec-item i {
+            color: #d4af37;
+        }
+
+        .booking-card {
+            background: #fff;
+            padding: 2rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 1px solid #f0f0f0;
+            position: sticky;
+            top: 2rem;
+        }
+
+        .price-display {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .price-from {
+            font-size: 1rem;
+            color: #666;
+            font-weight: normal;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #aa8453;
+        }
+
+        .guest-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .guest-control {
+            flex: 1;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .qty-btn {
+            background: #f3f4f6;
+            border: none;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .qty-btn:hover {
+            background: #aa8453;
+            color: #fff;
+        }
+
+        .extra-services {
+            margin: 2rem 0;
+        }
+
+        .service-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .service-item:last-child {
+            border-bottom: none;
+        }
+
+        .service-checkbox {
+            margin-right: 0.5rem;
+        }
+
+        .cost-breakdown {
+            background: #f9fafb;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .total-cost {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #333;
+            border-top: 2px solid #e5e7eb;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .book-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #aa8453 0%, #8a6d3b 100%);
+            color: #fff;
+            padding: 1rem;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .book-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(170, 132, 83, 0.3);
+        }
+
+        .description-section {
+            background: #f9fafb;
+            padding: 3rem 0;
+        }
+
+        .room-info-grid {
+            background: #fff;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin: 2rem 0;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: 500;
+            color: #666;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .facilities-section {
+            padding: 3rem 0;
+        }
+
+        .facility-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .facility-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #fff;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .facility-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .facility-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #aa8453 0%, #8a6d3b 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.2rem;
+        }
+
+        .room-selector {
+            margin-bottom: 2rem;
+        }
+
+        .room-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .room-tab {
+            padding: 0.75rem 1.5rem;
+            background: #f3f4f6;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #222;
+        }
+
+        .room-tab.active {
+            background: #aa8453;
+            color: #fff;
+        }
+
+        .room-tab:not(.active):hover {
+            background: #e5e7eb;
+            color: #222;
+        }
+
+        /* Room Card Styles for Around the Room and Similar Rooms */
+        .room-card {
+            position: relative;
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .room-card:nth-child(1) { transform: translateX(-100px); }
+        .room-card:nth-child(2) { transform: translateY(100px); }
+        .room-card:nth-child(3) { transform: translateX(100px); }
+        .room-card:nth-child(4) { transform: translateY(-100px); }
+
+        .room-card.visible {
+            opacity: 1;
+            transform: translate(0) scale(1);
+        }
+
+        .room-card-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .room-card:hover .room-card-image {
+            transform: scale(1.1) rotate(1deg);
+        }
+
+        .room-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 2rem;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(20px);
+        }
+
+        .room-card:hover .room-overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .room-title {
+            color: #fff;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-family: 'Poppins', sans-serif;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
+        }
+
+        .room-card:hover .room-title {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .room-price {
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            font-family: 'Poppins', sans-serif;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+        }
+
+        .room-card:hover .room-price {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .room-amenities {
+            color: #fff;
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+        }
+
+        .room-card:hover .room-amenities {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .book-now-btn {
+            background: transparent;
+            border: 2px solid #fff;
+            color: #fff;
+            padding: 0.5rem 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Poppins', sans-serif;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.4s;
+        }
+
+        .room-card:hover .book-now-btn {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .book-now-btn:hover {
+            background: #aa8453;
+            border-color: #aa8453;
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(170, 132, 83, 0.3);
+        }
+
+        .around-room-label {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        /* Similar Rooms Section Styles */
+        .around-room-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .similar-rooms-carousel {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .carousel-slide {
+            display: flex;
+            width: fit-content;
+            transition: transform 1s ease-in-out;
+        }
+
+        .carousel-slide .room-card {
+            flex: 0 0 33.33%;
+            max-width: 33.33%;
+        }
+
+        @media (max-width: 1024px) {
+            .carousel-slide .room-card {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .carousel-slide .room-card {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
+
+        footer {
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 50px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #aa8453;
+        }
+
+        .footer-column p,
+        .footer-column a {
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.6;
+            text-decoration: none;
+        }
+
+        .footer-column a:hover {
+            color: #aa8453;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+            transition: transform 0.2s, color 0.2s;
+        }
+
+        .footer-column ul li:hover {
+            color: #aa8453;
+            transform: translateX(8px) scale(1.05);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .social-icons a {
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .social-icons a:hover {
+            color: #aa8453;
+        }
+
+        .subscribe input {
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .subscribe button {
+            background-color: #aa8453;
+            border: none;
+            padding: 10px;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .room-specs {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .guest-controls {
+                flex-direction: column;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            header {
+                padding: 20px;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    
+    <header>
+        <div class="logo">
+            <img src="/img/logo-nav.png" alt="Edingo Inn Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="service.html">Services</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="news.html">News</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="decorative-text">HOTEL EDINGO BOOKING</div>
+        <h1 class="hero-title" id="room-title">Junior Suite</h1>
+        <p class="text-gray-600" id="room-subtitle">40-inch LED TV / Mini bar / Non-smoking / USB charging</p>
+    </section>
+
+    <!-- Room Selection Tabs -->
+    <section class="py-8 px-4">
+        <div class="container mx-auto">
+            <div class="room-selector">
+                <div class="room-tabs">
+                    <button class="room-tab active" data-room="junior-suite">Junior Suite</button>
+                    <button class="room-tab" data-room="double-room">Double Room</button>
+                    <button class="room-tab" data-room="triple-room">Triple Room</button>
+                    <button class="room-tab" data-room="deluxe-room">Deluxe Room</button>
+                    <button class="room-tab" data-room="family-room">Family Room</button>
+                    <button class="room-tab" data-room="skyline-suite">Skyline Suite</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Room Details Section -->
+    <section class="room-details-section">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Room Image and Details -->
+                <div class="lg:col-span-2">
+                    <img id="main-room-image" src="https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=2074&auto=format&fit=crop" alt="Junior Suite" class="room-image">
+                    <div class="room-specs" id="room-specs">
+                        <div class="spec-item">
+                            <i class="fas fa-home"></i>
+                            <span id="room-size">600 m²</span>
+                        </div>
+                        <div class="spec-item">
+                            <i class="fas fa-users"></i>
+                            <span id="room-guests">2 Guests</span>
+                        </div>
+                        <div class="spec-item">
+                            <i class="fas fa-bed"></i>
+                            <span id="room-beds">2 Beds</span>
+                        </div>
+                        <div class="spec-item">
+                            <i class="fas fa-bath"></i>
+                            <span id="room-bathrooms">2 Bathrooms</span>
+                        </div>
+                        <div class="spec-item">
+                            <i class="fas fa-wifi"></i>
+                            <span>Wifi Available</span>
+                        </div>
+                        <div class="spec-item">
+                            <i class="fas fa-snowflake"></i>
+                            <span>Air Conditioning</span>
+                        </div>
+                    </div>
+                    <!-- Description Section moved here -->
+                    <section class="description-section">
+                        <h2 class="text-3xl font-bold text-center mb-8">Description of the Room</h2>
+                        <div class="max-w-4xl mx-auto text-gray-600 leading-relaxed">
+                            <p id="room-description">Mauris non dignissim purus, ac commodo diam. Donec sit amet lacinia nulla. Aliquam quis purus in justo pulvinar tempor. Aliquam tellus nulla, sollicitudin at euismod nec, feugiat at nisl. Quisque vitae odio nec lacus interdum tempus. Phasellus a rhoncus erat. Vivamus vel eros vitae est aliquet pellentesque vitae et nunc. Sed vitae leo vitae nisl pellentesque semper.</p>
+                        </div>
+                        <div class="room-info-grid">
+                            <div class="info-item">
+                                <span class="info-label">Room Size</span>
+                                <span class="info-value" id="info-size">600 m²</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Rooms Bed</span>
+                                <span class="info-value" id="info-beds">2 Beds</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Occupancy</span>
+                                <span class="info-value" id="info-occupancy">Three Persons</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">View</span>
+                                <span class="info-value" id="info-view">Sea View</span>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <!-- Booking Card -->
+                <div class="lg:col-span-1">
+                    <div class="booking-card">
+                        <div class="price-display">
+                            <span class="price-from">From</span>
+                            <span id="room-price">$599</span>/night
+                        </div>
+                        <div id="booking-form">
+                            <div class="form-group">
+                                <label class="form-label">Check In</label>
+                                <input type="date" class="form-input" id="check-in" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Check Out</label>
+                                <input type="date" class="form-input" id="check-out" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Rooms</label>
+                                <div class="quantity-control">
+                                    <button type="button" class="qty-btn" onclick="changeQuantity('rooms', -1)">-</button>
+                                    <input type="number" class="form-input text-center" id="rooms" value="1" min="1" readonly>
+                                    <button type="button" class="qty-btn" onclick="changeQuantity('rooms', 1)">+</button>
+                                </div>
+                            </div>
+                            <div class="guest-controls">
+                                <div class="guest-control">
+                                    <label class="form-label">Adults</label>
+                                    <div class="quantity-control">
+                                        <button type="button" class="qty-btn" onclick="changeQuantity('adults', -1)">-</button>
+                                        <input type="number" class="form-input text-center" id="adults" value="1" min="1" readonly>
+                                        <button type="button" class="qty-btn" onclick="changeQuantity('adults', 1)">+</button>
+                                    </div>
+                                </div>
+                                <div class="guest-control">
+                                    <label class="form-label">Children</label>
+                                    <div class="quantity-control">
+                                        <button type="button" class="qty-btn" onclick="changeQuantity('children', -1)">-</button>
+                                        <input type="number" class="form-input text-center" id="children" value="0" min="0" readonly>
+                                        <button type="button" class="qty-btn" onclick="changeQuantity('children', 1)">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="extra-services">
+                                <h4 class="form-label">Extra Services</h4>
+                                <div class="service-item">
+                                    <label>
+                                        <input type="checkbox" class="service-checkbox" data-price="10"> Laundry
+                                    </label>
+                                    <span>$10 / Night</span>
+                                </div>
+                                <div class="service-item">
+                                    <label>
+                                        <input type="checkbox" class="service-checkbox" data-price="30"> Car Rental
+                                    </label>
+                                    <span>$30 / Night</span>
+                                </div>
+                                <div class="service-item">
+                                    <label>
+                                        <input type="checkbox" class="service-checkbox" data-price="10"> Breakfast
+                                    </label>
+                                    <span>$10 / Night</span>
+                                </div>
+                                <div class="service-item">
+                                    <label>
+                                        <input type="checkbox" class="service-checkbox" data-price="10"> Sea View
+                                    </label>
+                                    <span>$10 / Night</span>
+                                </div>
+                                <div class="service-item">
+                                    <label>
+                                        <input type="checkbox" class="service-checkbox" data-price="10"> Wifi
+                                    </label>
+                                    <span>$10 / Night</span>
+                                </div>
+                            </div>
+                            <div class="cost-breakdown">
+                                <div class="cost-item">
+                                    <span>Base Price</span>
+                                    <span id="base-price">$599</span>
+                                </div>
+                                <div class="cost-item">
+                                    <span>Extra Services</span>
+                                    <span id="extra-services-cost">$0</span>
+                                </div>
+                                <div class="cost-item total-cost">
+                                    <span>Total Cost</span>
+                                    <span id="total-cost">$599</span>
+                                </div>
+                            </div>
+                            <button type="button" class="book-btn" onclick="submitBooking()">Book Your Stay Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Facilities Section -->
+    <section class="facilities-section">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8">Facility of the Room</h2>
+            <div class="facility-grid">
+                <div class="facility-item">
+                    <div class="facility-icon">
+                        <i class="fas fa-snowflake"></i>
+                    </div>
+                    <span>Air Condition</span>
+                </div>
+                <div class="facility-item">
+                    <div class="facility-icon">
+                        <i class="fas fa-swimming-pool"></i>
+                    </div>
+                    <span>Swimming Pool</span>
+                </div>
+                <div class="facility-item">
+                    <div class="facility-icon">
+                        <i class="fas fa-dumbbell"></i>
+                    </div>
+                    <span>Gymnasium</span>
+                </div>
+                <div class="facility-item">
+                    <div class="facility-icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <span>Parking</span>
+                </div>
+                <div class="facility-item">
+                    <div class="facility-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <span>Security</span>
+                </div>
+                <div class="facility-item">
+                    <div class="facility-icon">
+                        <i class="fas fa-child"></i>
+                    </div>
+                    <span>Playground</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Around the Room Section -->
+    <section class="py-16 px-4">
+        <h2 class="text-4xl font-bold text-center mb-8">Around the Room</h2>
+        <div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+            <!-- Image 1: Private Bedroom -->
+            <div class="room-card">
+                <img src="https://images.unsplash.com/photo-1740446568792-647ddb3f6f9a?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Private Bedroom" class="room-card-image">
+                <p class="around-room-label">Private Bedroom</p>
+            </div>
+            <!-- Image 2: Spa Room -->
+            <div class="room-card">
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop" alt="Spa Room" class="room-card-image">
+                <p class="around-room-label">Spa Room</p>
+            </div>
+            <!-- Image 3: Gym Room -->
+            <div class="room-card">
+                <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop" alt="Gym Room" class="room-card-image">
+                <p class="around-room-label">Gym Room</p>
+            </div>
+            <!-- Image 4: Hotel Lounge -->
+            <div class="room-card">
+                <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=2070&auto=format&fit=crop" alt="Hotel Lounge" class="room-card-image">
+                <p class="around-room-label">Hotel Lounge</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Similar Rooms Section (Carousel) -->
+    <section class="py-16 px-4">
+        <h2 class="around-room-title">Similar Rooms</h2>
+        <div class="container mx-auto">
+            <div class="similar-rooms-carousel">
+                <div class="carousel-slide">
+                    <!-- Double Room -->
+                    <div class="room-card">
+                        <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=2070&auto=format&fit=crop" alt="Double Room" class="room-card-image">
+                        <div class="room-overlay">
+                            <h3 class="room-title">Double Room</h3>
+                            <p class="room-price">$299/Night</p>
+                            <div class="room-amenities">
+                                <i class="fas fa-bed"></i>
+                                <i class="fas fa-tv"></i>
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <a href="book.html?room=double-room" class="book-now-btn">Book Now</a>
+                        </div>
+                    </div>
+
+                    <!-- Junior Suite -->
+                    <div class="room-card">
+                        <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=2074&auto=format&fit=crop" alt="Junior Suite" class="room-card-image">
+                        <div class="room-overlay">
+                            <h3 class="room-title">Junior Suite</h3>
+                            <p class="room-price">$599/Night</p>
+                            <div class="room-amenities">
+                                <i class="fas fa-bed"></i>
+                                <i class="fas fa-tv"></i>
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <a href="book.html?room=junior-suite" class="book-now-btn">Book Now</a>
+                        </div>
+                    </div>
+
+                    <!-- Family Room -->
+                    <div class="room-card">
+                        <img src="https://images.unsplash.com/photo-1590490359683-658d3d23f972?q=80&w=2074&auto=format&fit=crop" alt="Family Room" class="room-card-image">
+                        <div class="room-overlay">
+                            <h3 class="room-title">Family Room</h3>
+                            <p class="room-price">$899/Night</p>
+                            <div class="room-amenities">
+                                <i class="fas fa-bed"></i>
+                                <i class="fas fa-tv"></i>
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <a href="book.html?room=family-room" class="book-now-btn">Book Now</a>
+                        </div>
+                    </div>
+
+                    <!-- Deluxe Room -->
+                    <div class="room-card">
+                        <img src="https://images.unsplash.com/photo-1591088398332-8a7791972843?q=80&w=2070&auto=format&fit=crop" alt="Deluxe Room" class="room-card-image">
+                        <div class="room-overlay">
+                            <h3 class="room-title">Deluxe Room</h3>
+                            <p class="room-price">$499/Night</p>
+                            <div class="room-amenities">
+                                <i class="fas fa-bed"></i>
+                                <i class="fas fa-tv"></i>
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <a href="book.html?room=deluxe-room" class="book-now-btn">Book Now</a>
+                        </div>
+                    </div>
+
+                    <!-- Skyline Suite -->
+                    <div class="room-card">
+                        <img src="https://images.unsplash.com/photo-1616046229478-9901c5536a45?q=80&w=2070&auto=format&fit=crop" alt="Skyline Suite" class="room-card-image">
+                        <div class="room-overlay">
+                            <h3 class="room-title">Skyline Suite</h3>
+                            <p class="room-price">$699/Night</p>
+                            <div class="room-amenities">
+                                <i class="fas fa-bed"></i>
+                                <i class="fas fa-tv"></i>
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <a href="book.html?room=skyline-suite" class="book-now-btn">Book Now</a>
+                        </div>
+                    </div>
+
+                    <!-- Triple Room -->
+                    <div class="room-card">
+                        <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=2070&auto=format&fit=crop" alt="Triple Room" class="room-card-image">
+                        <div class="room-overlay">
+                            <h3 class="room-title">Triple Room</h3>
+                            <p class="room-price">$399/Night</p>
+                            <div class="room-amenities">
+                                <i class="fas fa-bed"></i>
+                                <i class="fas fa-tv"></i>
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <a href="book.html?room=triple-room" class="book-now-btn">Book Now</a>
+                        </div>
+                    </div>
+
+                    <!-- Duplicate for seamless looping -->
+                    <div class="room-card">
+                        <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=2070&auto=format&fit=crop" alt="Double Room" class="room-card-image">
+                        <div class="room-overlay">
+                            <h3 class="room-title">Double Room</h3>
+                            <p class="room-price">$299/Night</p>
+                            <div class="room-amenities">
+                                <i class="fas fa-bed"></i>
+                                <i class="fas fa-tv"></i>
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <a href="book.html?room=double-room" class="book-now-btn">Book Now</a>
+                        </div>
+                    </div>
+
+                    <div class="room-card">
+                        <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=2074&auto=format&fit=crop" alt="Junior Suite" class="room-card-image">
+                        <div class="room-overlay">
+                            <h3 class="room-title">Junior Suite</h3>
+                            <p class="room-price">$599/Night</p>
+                            <div class="room-amenities">
+                                <i class="fas fa-bed"></i>
+                                <i class="fas fa-tv"></i>
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <a href="book.html?room=junior-suite" class="book-now-btn">Book Now</a>
+                        </div>
+                    </div>
+
+                    <div class="room-card">
+                        <img src="https://images.unsplash.com/photo-1590490359683-658d3d23f972?q=80&w=2074&auto=format&fit=crop" alt="Family Room" class="room-card-image">
+                        <div class="room-overlay">
+                            <h3 class="room-title">Family Room</h3>
+                            <p class="room-price">$899/Night</p>
+                            <div class="room-amenities">
+                                <i class="fas fa-bed"></i>
+                                <i class="fas fa-tv"></i>
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <a href="book.html?room=family-room" class="book-now-btn">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-column">
+            <h3>Edingo Inn</h3>
+            <p>Feel free to reach out if you want to collaborate with us, or chat.</p>
+            <div class="subscribe">
+                <input type="email" placeholder="Your Email">
+                <button><i class="fas fa-paper-plane"></i></button>
+            </div>
+            <h3>Follow Us</h3>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-tiktok"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+        <div class="footer-column">
+            <h3>Service</h3>
+            <ul>
+                <li><a href="#">Store Directory</a></li>
+                <li><a href="#">Top Hotels</a></li>
+                <li><a href="#">Quick Links</a></li>
+                <li><a href="#">Important Links</a></li>
+                <li><a href="#">Insights</a></li>
+                <li><a href="#">Knowledge Center</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3>Company</h3>
+            <ul class="footer-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="service.html">Services</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="news.html">News</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script>
+        // Room data
+        const roomsData = {
+            'junior-suite': {
+                title: 'Junior Suite',
+                subtitle: '40-inch LED TV / Mini bar / Non-smoking / USB charging',
+                image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=2074&auto=format&fit=crop',
+                price: 599,
+                size: '600 m²',
+                guests: '2 Guests',
+                beds: '2 Beds',
+                bathrooms: '2 Bathrooms',
+                description: 'Mauris non dignissim purus, ac commodo diam. Donec sit amet lacinia nulla. Aliquam quis purus in justo pulvinar tempor. Aliquam tellus nulla, sollicitudin at euismod nec, feugiat at nisl. Quisque vitae odio nec lacus interdum tempus. Phasellus a rhoncus erat. Vivamus vel eros vitae est aliquet pellentesque vitae et nunc. Sed vitae leo vitae nisl pellentesque semper.',
+                infoSize: '600 m²',
+                infoBeds: '2 Beds',
+                infoOccupancy: 'Three Persons',
+                infoView: 'Sea View'
+            },
+            'double-room': {
+                title: 'Double Room',
+                subtitle: '32-inch LED TV / Non-smoking / USB charging',
+                image: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=2070&auto=format&fit=crop',
+                price: 299,
+                size: '400 m²',
+                guests: '2 Guests',
+                beds: '1 Bed',
+                bathrooms: '1 Bathroom',
+                description: 'A cozy room perfect for couples, featuring a comfortable double bed and modern amenities. Enjoy a relaxing stay with all the essentials you need.',
+                infoSize: '400 m²',
+                infoBeds: '1 Double Bed',
+                infoOccupancy: 'Two Persons',
+                infoView: 'City View'
+            },
+            'triple-room': {
+                title: 'Triple Room',
+                subtitle: '40-inch LED TV / Mini bar / Non-smoking',
+                image: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=2070&auto=format&fit=crop',
+                price: 399,
+                size: '500 m²',
+                guests: '3 Guests',
+                beds: '3 Beds',
+                bathrooms: '1 Bathroom',
+                description: 'Spacious room ideal for small groups or families, offering three comfortable beds and modern facilities for a pleasant stay.',
+                infoSize: '500 m²',
+                infoBeds: '3 Single Beds',
+                infoOccupancy: 'Three Persons',
+                infoView: 'Garden View'
+            },
+            'deluxe-room': {
+                title: 'Deluxe Room',
+                subtitle: '50-inch LED TV / Mini bar / Non-smoking / Balcony',
+                image: 'https://images.unsplash.com/photo-1591088398332-8a7791972843?q=80&w=2070&auto=format&fit=crop',
+                price: 499,
+                size: '550 m²',
+                guests: '2 Guests',
+                beds: '1 King Bed',
+                bathrooms: '1 Bathroom',
+                description: 'Experience luxury in our Deluxe Room, featuring a king-sized bed, a private balcony, and premium amenities for an unforgettable stay.',
+                infoSize: '550 m²',
+                infoBeds: '1 King Bed',
+                infoOccupancy: 'Two Persons',
+                infoView: 'Sea View'
+            },
+            'family-room': {
+                title: 'Family Room',
+                subtitle: '50-inch LED TV / Mini bar / Non-smoking / Extra space',
+                image: 'https://images.unsplash.com/photo-1590490359683-658d3d23f972?q=80&w=2074&auto=format&fit=crop',
+                price: 899,
+                size: '800 m²',
+                guests: '4 Guests',
+                beds: '3 Beds',
+                bathrooms: '2 Bathrooms',
+                description: 'Perfect for families, this spacious room offers extra space, multiple beds, and all the amenities needed for a comfortable stay.',
+                infoSize: '800 m²',
+                infoBeds: '3 Beds',
+                infoOccupancy: 'Four Persons',
+                infoView: 'City View'
+            },
+            'skyline-suite': {
+                title: 'Skyline Suite',
+                subtitle: '55-inch LED TV / Mini bar / Non-smoking / Panoramic view',
+                image: 'https://images.unsplash.com/photo-1616046229478-9901c5536a45?q=80&w=2070&auto=format&fit=crop',
+                price: 699,
+                size: '700 m²',
+                guests: '2 Guests',
+                beds: '1 King Bed',
+                bathrooms: '2 Bathrooms',
+                description: 'Enjoy breathtaking views in our Skyline Suite, featuring a panoramic view, a king-sized bed, and luxurious amenities for a premium experience.',
+                infoSize: '700 m²',
+                infoBeds: '1 King Bed',
+                infoOccupancy: 'Two Persons',
+                infoView: 'Panoramic Skyline View'
+            }
+        };
+
+        // Function to update room details
+        function updateRoomDetails(roomId) {
+            const room = roomsData[roomId];
+            if (!room) return;
+
+            // Update hero section
+            document.getElementById('room-title').textContent = room.title;
+            document.getElementById('room-subtitle').textContent = room.subtitle;
+
+            // Update main image
+            document.getElementById('main-room-image').src = room.image;
+            document.getElementById('main-room-image').alt = room.title;
+
+            // Update room specs
+            document.getElementById('room-size').textContent = room.size;
+            document.getElementById('room-guests').textContent = room.guests;
+            document.getElementById('room-beds').textContent = room.beds;
+            document.getElementById('room-bathrooms').textContent = room.bathrooms;
+
+            // Update booking card
+            document.getElementById('room-price').textContent = `$${room.price}`;
+            document.getElementById('base-price').textContent = `$${room.price}`;
+            document.getElementById('total-cost').textContent = `$${room.price}`;
+
+            // Update description section
+            document.getElementById('room-description').textContent = room.description;
+            document.getElementById('info-size').textContent = room.infoSize;
+            document.getElementById('info-beds').textContent = room.infoBeds;
+            document.getElementById('info-occupancy').textContent = room.infoOccupancy;
+            document.getElementById('info-view').textContent = room.infoView;
+
+            // Update active tab
+            document.querySelectorAll('.room-tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.getAttribute('data-room') === roomId) {
+                    tab.classList.add('active');
+                }
+            });
+
+            updateTotalCost();
+        }
+
+        // Function to change quantity
+        function changeQuantity(field, delta) {
+            const input = document.getElementById(field);
+            let value = parseInt(input.value) + delta;
+            if (field === 'rooms' || field === 'adults') {
+                if (value < 1) value = 1;
+            } else if (field === 'children') {
+                if (value < 0) value = 0;
+            }
+            input.value = value;
+            updateTotalCost();
+        }
+
+        // Function to update total cost
+        function updateTotalCost() {
+            const roomId = document.querySelector('.room-tab.active').getAttribute('data-room');
+            const room = roomsData[roomId];
+            const rooms = parseInt(document.getElementById('rooms').value);
+            let extraServicesCost = 0;
+
+            document.querySelectorAll('.service-checkbox:checked').forEach(checkbox => {
+                extraServicesCost += parseInt(checkbox.getAttribute('data-price'));
+            });
+
+            const baseCost = room.price * rooms;
+            const totalCost = baseCost + extraServicesCost;
+
+            document.getElementById('base-price').textContent = `$${baseCost}`;
+            document.getElementById('extra-services-cost').textContent = `$${extraServicesCost}`;
+            document.getElementById('total-cost').textContent = `$${totalCost}`;
+        }
+
+        // Function to handle form submission
+        function submitBooking() {
+            const checkIn = document.getElementById('check-in').value;
+            const checkOut = document.getElementById('check-out').value;
+            const rooms = document.getElementById('rooms').value;
+            const adults = document.getElementById('adults').value;
+            const children = document.getElementById('children').value;
+            const roomId = document.querySelector('.room-tab.active').getAttribute('data-room');
+            const roomTitle = roomsData[roomId].title;
+            const totalCost = document.getElementById('total-cost').textContent;
+
+            if (!checkIn || !checkOut) {
+                alert('Please select check-in and check-out dates.');
+                return;
+            }
+
+            alert(`Booking confirmed!\nRoom: ${roomTitle}\nCheck-In: ${checkIn}\nCheck-Out: ${checkOut}\nRooms: ${rooms}\nAdults: ${adults}\nChildren: ${children}\nTotal Cost: ${totalCost}`);
+        }
+
+        // Event listeners for room tabs
+        document.querySelectorAll('.room-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const roomId = tab.getAttribute('data-room');
+                updateRoomDetails(roomId);
+            });
+        });
+
+        // Event listeners for extra services
+        document.querySelectorAll('.service-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', updateTotalCost);
+        });
+
+        // Pre-select room based on URL parameter
+        window.onload = () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const roomId = urlParams.get('room') || 'junior-suite';
+            updateRoomDetails(roomId);
+
+            // Initialize carousels
+            initializeCarousels();
+        };
+
+        // Intersection Observer for scroll animation
+        const roomCards = document.querySelectorAll('.room-card');
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.3
+        });
+
+        roomCards.forEach(card => {
+            observer.observe(card);
+        });
+
+        // Function to initialize carousels
+        function initializeCarousels() {
+            // Similar Rooms Carousel
+            const carouselSlide = document.querySelector('.carousel-slide');
+            const totalRooms = 6; // Total unique rooms
+            let currentIndex = 0;
+
+            function updateCarousel() {
+                currentIndex++;
+                if (currentIndex >= totalRooms) {
+                    currentIndex = 0;
+                    carouselSlide.style.transition = 'none';
+                    carouselSlide.style.transform = `translateX(0%)`;
+                    void carouselSlide.offsetWidth;
+                    carouselSlide.style.transition = 'transform 1s ease-in-out';
+                }
+                carouselSlide.style.transform = `translateX(-${(currentIndex * 100) / 3}%)`;
+            }
+
+            updateCarousel();
+            setInterval(updateCarousel, 3000);
+        }
+    </script>
+</body>
+</html>

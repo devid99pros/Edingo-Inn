@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us - Hotel</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Montserrat', Arial, sans-serif;
+      background: linear-gradient(120deg, #f8f9fa 60%, #f3e9d2 100%);
+    }
+    
+header {
+            background-color: #fff;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo img {
+            height: 100px;
+            width: 100px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 14px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #d4af37;
+            transform: scale(1.1);
+        }
+        footer {
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 50px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #d4af37;
+        }
+
+        .footer-column p,
+        .footer-column a {
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.6;
+            text-decoration: none;
+        }
+
+        .footer-column a:hover {
+            color: #d4af37;
+        }
+
+        .footer-column ul {
+            list-style: none;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: footerLinksUp 1s 1.2s cubic-bezier(0.4,0,0.2,1) forwards;
+        }
+        @keyframes footerLinksUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .footer-column ul li {
+            margin-bottom: 10px;
+            transition: transform 0.2s, color 0.2s;
+        }
+        .footer-column ul li:hover {
+            color: #d4af37;
+            transform: translateX(8px) scale(1.05);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .social-icons a {
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .social-icons a:hover {
+            color: #d4af37;
+        }
+
+        .subscribe input {
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .subscribe button {
+            background-color: #d4af37;
+            border: none;
+            padding: 10px;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding: 20px;
+            background-color: #111;
+            color: #ccc;
+            font-size: 14px;
+        }
+
+    .section-title {
+      text-align: center;
+      font-weight: bold;
+      font-size: 2rem;
+      margin: 4rem 0 2rem;
+      position: relative;
+      color: #8b6e4c;
+      letter-spacing: 2px;
+    }
+    .section-title::before,
+    .section-title::after {
+      content: '✦';
+      color: #c59d5f;
+      margin: 0 1rem;
+      font-size: 1.5rem;
+      vertical-align: middle;
+    }
+    .card-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2.5rem;
+      margin-bottom: 4rem;
+      justify-content: center;
+    }
+    .info-block {
+      background: linear-gradient(120deg, #fff 80%, #f3e9d2 100%);
+      padding: 2.5rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2.5rem;
+      align-items: center;
+      box-shadow: 0 6px 32px rgba(197,157,95,0.08), 0 1.5px 8px rgba(0,0,0,0.04);
+      min-width: 340px;
+      max-width: 900px;
+      margin: 0 auto;
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .info-block:hover {
+      box-shadow: 0 12px 48px rgba(197,157,95,0.18), 0 4px 16px rgba(0,0,0,0.10);
+      transform: translateY(-8px) scale(1.025);
+      z-index: 2;
+    }
+    .info-block.reverse {
+      flex-direction: row-reverse;
+    }
+    .info-block img {
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 24px rgba(197,157,95,0.10);
+      transition: transform 0.5s cubic-bezier(0.4,0,0.2,1), box-shadow 0.5s, filter 0.5s;
+    }
+    .info-block:hover img {
+      transform: scale(1.06) rotate(-2deg);
+      box-shadow: 0 8px 32px rgba(197,157,95,0.18);
+      filter: brightness(1.07) saturate(1.2);
+    }
+    .info-content h4 {
+      color: #c59d5f;
+      font-weight: 700;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      letter-spacing: 1px;
+    }
+    .info-content p, .info-content ul {
+      color: #5a4a36;
+      font-size: 1.08rem;
+      margin-bottom: 1.1rem;
+    }
+    .info-content ul {
+      padding-left: 1.2rem;
+    }
+    .info-content li {
+      margin-bottom: 0.5rem;
+      list-style: disc;
+    }
+    .btn-outline-dark {
+      border-color: #c59d5f;
+      color: #c59d5f;
+      font-weight: 600;
+      letter-spacing: 1px;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(197,157,95,0.08);
+    }
+    .btn-outline-dark:hover {
+      background: #c59d5f;
+      color: #fff;
+      border-color: #c59d5f;
+      box-shadow: 0 4px 16px rgba(197,157,95,0.18);
+    }
+    .bg-hero {
+      background: linear-gradient(rgba(40,40,40,0.5),rgba(197,157,95,0.5)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') no-repeat center center;
+      background-size: cover;
+      height: 320px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 2.5rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      margin-bottom: 2.5rem;
+      position: relative;
+      text-shadow: 0 4px 16px rgba(0,0,0,0.22);
+    }
+    
+    @media (max-width: 991px) {
+      .info-block, .info-block.reverse {
+        flex-direction: column !important;
+        text-align: center;
+      }
+      .info-block img {
+        margin-bottom: 1.5rem;
+      }
+    }
+    @media (max-width: 767px) {
+      .bg-hero {
+        font-size: 1.5rem;
+        height: 180px;
+      }
+      .info-block {
+        padding: 1.2rem 0.5rem;
+      }
+      .section-title {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo">
+        <img src="/img/logo-nav.png" alt="Edingo Inn Logo">
+    </div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="service.html">Services</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="news.html">News</a></li>
+        </ul>
+    </nav>
+    </header>
+  
+  <div id="global-loader" style="position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+    <div style="display:flex;gap:10px;margin-bottom:10px;">
+      <div style="width:15px;height:15px;background:#ccc;border-radius:50%;animation:fade 1.5s infinite;"></div>
+      <div style="width:15px;height:15px;background:#ccc;border-radius:50%;animation:fade 1.5s infinite 0.3s;"></div>
+      <div style="width:15px;height:15px;background:#ccc;border-radius:50%;animation:fade 1.5s infinite 0.6s;"></div>
+    </div>
+    <div style="font-size:48px;color:#fff;text-transform:uppercase;letter-spacing:5px;font-weight:bold;">LOADING</div>
+    <img src="/img/footer.logo.png" alt="Footer Logo" style="width:100px;margin-top:30px;">
+  </div>
+  <style>
+    @keyframes fade {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+  </style>
+
+  <!-- Hero Banner -->
+  <div class="bg-hero">
+    About The Hotel
+  </div>
+
+  <!-- Section 1 -->
+  <div class="container py-5">
+    <div class="info-block">
+      <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Hotel Interior">
+      <div class="info-content">
+        <h4>We Provide Outdoor Activities To All Visitors</h4>
+        <p>Our operations span the globe, offering unparalleled services across various destinations. Explore with us and live luxuriously.</p>
+        <ul>
+          <li>Exquisite service tailored for relaxation</li>
+          <li>Indoor and outdoor wellness areas</li>
+          <li>Professional and caring staff</li>
+        </ul>
+        <a href="#" class="btn btn-outline-dark">Contact Us</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div class="section-title">ROOMS & SUITES</div>
+
+  <!-- Section 2 -->
+  <div class="container card-section">
+    <div class="info-block reverse">
+      <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80" alt="Restaurant">
+      <div class="info-content">
+        <h4>The Restaurant</h4>
+        <p>Discover gourmet delights crafted by our chefs. Our restaurant offers a cozy ambiance and rich menu variety.</p>
+        <a href="#" class="btn btn-outline-dark">Contact Us</a>
+      </div>
+    </div>
+
+    <div class="info-block">
+      <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=400&q=80" alt="Spa">
+      <div class="info-content">
+        <h4>Spa Center</h4>
+        <p>Relax your body and soul at our luxurious spa. We offer massages, sauna, and therapy rooms for ultimate rejuvenation.</p>
+        <a href="#" class="btn btn-outline-dark">Contact Us</a>
+      </div>
+    </div>
+
+    <div class="info-block reverse">
+      <img src="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=400&q=80" alt="Room Interior">
+      <div class="info-content">
+        <h4>Elegant Rooms</h4>
+        <p>Our rooms are tailored to give you the comfort of home with the elegance of a high-end retreat.</p>
+        <a href="#" class="btn btn-outline-dark">Contact Us</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer text-center">
+    <small>&copy; 2025 Hotel Edingo Inn, Itahari. All rights reserved.</small>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+  <script>
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      var loader = document.getElementById('global-loader');
+      if (loader) loader.style.display = 'none';
+    }, 1200);
+  });
+  </script>
+</body>
+
+<footer>
+  <div class="footer-column">
+      <h3>Edingo Inn</h3>
+      <p>Feel free to reach out if you want to collaborate with us, or chat.</p>
+      <div class="subscribe">
+          <input type="email" placeholder="Your Email">
+          <button><i class="fas fa-paper-plane"></i></button>
+      </div>
+      <h3>Follow Us</h3>
+      <div class="social-icons">
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-tiktok"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+      </div>
+  </div>
+  <div class="footer-column">
+      <h3>Service</h3>
+      <ul>
+          <li><a href="#">Store Directory</a></li>
+          <li><a href="#">Top Hotels</a></li>
+          <li><a href="#">Quick Links</a></li>
+          <li><a href="#">Important Links</a></li>
+          <li><a href="#">Insights</a></li>
+          <li><a href="#">Knowledge Center</a></li>
+      </ul>
+  </div>
+  <div class="footer-column">
+      <h3>Company</h3>
+      <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="service.html">Services</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="news.html">News</a></li>
+      </ul>
+    
+  </div>
+  <div class="footer-column">
+      <h3>New York</h3>
+      <p>2948 Royal Ln, Mesa, New Jersey 456463</p>
+      <p>(000)222-0000</p>
+      <p>info@yourwebsite.com</p>
+      <h3>London</h3>
+      <p>1901 Thornrich Cir, Shiloh, Hawaii 81063</p>
+      <p>(229)555-0109</p>
+      <p>info@yourwebsite.com</p>
+  </div>
+</footer>
+</html>

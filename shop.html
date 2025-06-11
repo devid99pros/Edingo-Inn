@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Hotel Edingo Inn</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            font-size: 16px;
+            background: whitesmoke;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .shop-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .subtitle {
+            color: #c19a6b;
+            font-size: 18px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .main-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            color: #2c2c2c;
+            font-weight: 400;
+        }
+
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 0;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+            border: 2px solid transparent;
+        }
+
+        .product-card:hover {
+            border: 2px solid #aa8453;
+            box-shadow: 0 24px 60px 0 rgba(170, 132, 83, 0.18), 0 2px 8px rgba(0,0,0,0.10);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.4s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.1);
+        }
+
+        .product-content {
+            padding: 20px;
+        }
+
+        .product-title {
+            font-size: 24px;
+            font-weight: 400;
+            color: #5a4a3a;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            font-size: 18px;
+            color: #d4af37;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .product-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .add-to-cart, .buy-now {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 0;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .add-to-cart {
+            background: #666;
+            color: white;
+        }
+
+        .buy-now {
+            background: #aa8453;
+            color: white;
+        }
+
+        .add-to-cart::before, .buy-now::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 0;
+            background: linear-gradient(0deg, #aa8453, #927146);
+            z-index: -1;
+            transition: height 0.4s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        .add-to-cart:hover::before, .buy-now:hover::before {
+            height: 100%;
+        }
+
+        .add-to-cart:hover, .buy-now:hover {
+            color: white;
+        }
+
+        .cart-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .cart-modal.active {
+            display: flex;
+        }
+
+        .cart-content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+
+        .cart-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .cart-items {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-total {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .payment-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .payment-option {
+            flex: 1 1 45%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-option:hover {
+            border-color: #aa8453;
+            background: #f8f6f3;
+        }
+
+        .payment-option img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 12px;
+            background: #aa8453;
+            color: white;
+            border: none;
+            border-radius: 0;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkout-btn:hover {
+            background: #927146;
+        }
+
+        @media (max-width: 768px) {
+            .shop-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .main-title {
+                font-size: 36px;
+            }
+
+            .payment-option {
+                flex: 1 1 100%;
+            }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInBottom {
+            from { opacity: 0; transform: translateY(60px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .product-card {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.6s, transform 0.6s;
+        }
+
+        .product-card.animate-left {
+            animation: slideInLeft 0.8s cubic-bezier(0.4,0,0.2,1) forwards;
+        }
+        .product-card.animate-right {
+            animation: slideInRight 0.8s cubic-bezier(0.4,0,0.2,1) forwards;
+        }
+        .product-card.animate-bottom {
+            animation: slideInBottom 0.8s cubic-bezier(0.4,0,0.2,1) forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="shop-header">
+            <div class="subtitle">SHOP AT EDINGO INN</div>
+            <h1 class="main-title">Explore Our Exclusive Products</h1>
+        </div>
+
+        <div class="shop-grid">
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://m.media-amazon.com/images/I/51I7ZOB1+IL._AC_UF894,1000_QL80_.jpg');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Luxury Bathrobe</h3>
+                    <div class="product-price">$49</div>
+                    <p class="product-description">Soft and plush bathrobe with the Edingo Inn logo, perfect for a cozy stay.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Luxury Bathrobe" data-price="49">Add to Cart</button>
+                        <button class="buy-now" data-name="Luxury Bathrobe" data-price="49">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://shoplait.com/cdn/shop/files/LAITGIFTSET_03.jpg?v=1732506311');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Signature Candle Set</h3>
+                    <div class="product-price">$29</div>
+                    <p class="product-description">A set of aromatic candles inspired by the scents of Edingo Inn.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Signature Candle Set" data-price="29">Add to Cart</button>
+                        <button class="buy-now" data-name="Signature Candle Set" data-price="29">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://www.luxurycollectionstore.com/images/products/xlrg/luxury-collection-frette-slippers-LUX-457-01-01-WH-NL-AD_xlrg.jpg');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Hotel Slippers</h3>
+                    <div class="product-price">$15</div>
+                    <p class="product-description">Comfortable slippers with anti-slip soles, branded with Edingo Inn.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Hotel Slippers" data-price="15">Add to Cart</button>
+                        <button class="buy-now" data-name="Hotel Slippers" data-price="15">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmle16e6gO2IwpKIUwhRz5wLf76-OoBsM2mg&s');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Edingo Mug</h3>
+                    <div class="product-price">$12</div>
+                    <p class="product-description">Ceramic mug with the Edingo Inn logo, perfect for your morning coffee.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Edingo Mug" data-price="12">Add to Cart</button>
+                        <button class="buy-now" data-name="Edingo Mug" data-price="12">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAlSWw98FGv8Q7RLkKF8aNVDCC-l0Ar7Zv2g&s');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Spa Kit</h3>
+                    <div class="product-price">$35</div>
+                    <p class="product-description">A luxurious spa kit with bath salts, oils, and a loofah, curated by Edingo Inn.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Spa Kit" data-price="35">Add to Cart</button>
+                        <button class="buy-now" data-name="Spa Kit" data-price="35">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://www.nepal.ubuy.com/productimg/?image=aHR0cHM6Ly9tLm1lZGlhLWFtYXpvbi5jb20vaW1hZ2VzL0kvNjFUUm5heFNCYUwuX0FDX1NMMTUwMF8uanBn.jpg');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Tote Bag</h3>
+                    <div class="product-price">$20</div>
+                    <p class="product-description">Stylish canvas tote bag with the Edingo Inn logo, ideal for everyday use.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Tote Bag" data-price="20">Add to Cart</button>
+                        <button class="buy-now" data-name="Tote Bag" data-price="20">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSl9-oQJvPitbDC4_tfpZM-BS9DXnbPWiynKQ&s');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Hotel-Branded T-Shirt</h3>
+                    <div class="product-price">$25</div>
+                    <p class="product-description">A comfortable T-shirt featuring the Edingo Inn logo, perfect for casual wear.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Hotel-Branded T-Shirt" data-price="25">Add to Cart</button>
+                        <button class="buy-now" data-name="Hotel-Branded T-Shirt" data-price="25">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJoB3bmyWkmueNENTfR1_HFnVdMq7C_mM6Og&s');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Luxury Pillow Set</h3>
+                    <div class="product-price">$60</div>
+                    <p class="product-description">A set of two plush pillows, just like the ones in our rooms, for ultimate comfort.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Luxury Pillow Set" data-price="60">Add to Cart</button>
+                        <button class="buy-now" data-name="Luxury Pillow Set" data-price="60">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://houseofaroma.in/wp-content/uploads/2024/05/Orange-Bergamout.webp');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Scented Room Spray</h3>
+                    <div class="product-price">$18</div>
+                    <p class="product-description">A room spray with the signature Edingo Inn scent to refresh your space.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Scented Room Spray" data-price="18">Add to Cart</button>
+                        <button class="buy-now" data-name="Scented Room Spray" data-price="18">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://m.media-amazon.com/images/I/71ztLsKUeSL._AC_UF1000,1000_QL80_.jpg');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Handmade Soap Set</h3>
+                    <div class="product-price">$22</div>
+                    <p class="product-description">A set of three handmade soaps with natural ingredients, exclusive to Edingo Inn.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Handmade Soap Set" data-price="22">Add to Cart</button>
+                        <button class="buy-now" data-name="Handmade Soap Set" data-price="22">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUB3elVmGRssQe5IxbfHV-aVSDsjsg8_9koA&s');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Leather Keychain</h3>
+                    <div class="product-price">$10</div>
+                    <p class="product-description">A sleek leather keychain with the Edingo Inn logo, perfect as a small keepsake.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Leather Keychain" data-price="10">Add to Cart</button>
+                        <button class="buy-now" data-name="Leather Keychain" data-price="10">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPwkMosi93ocqZcRWEHK9WmHbt5xGj85sl9g&s');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Postcard Set</h3>
+                    <div class="product-price">$8</div>
+                    <p class="product-description">A set of five postcards featuring scenic views of the Edingo Inn and its surroundings.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Postcard Set" data-price="8">Add to Cart</button>
+                        <button class="buy-now" data-name="Postcard Set" data-price="8">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBZqfPXPmmoqDMghLIqQ2PWU1mWzvl6u2M2Q&s');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Edingo Inn Cap</h3>
+                    <div class="product-price">$15</div>
+                    <p class="product-description">A stylish cap with the Edingo Inn logo, perfect for outdoor activities.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Edingo Inn Cap" data-price="15">Add to Cart</button>
+                        <button class="buy-now" data-name="Edingo Inn Cap" data-price="15">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://i5.walmartimages.com/seo/OAVQHLG3B-Aroma-Diffuser-Essential-Oil-Large-Room-Diffusers-Set-Ultrasonic-550ml-Aromatherapy-Bedroom-Vaporizer-Cool-Mist-Humidifier-Home-Office_abd98a5b-9526-487e-8ded-a022f204aecf.288d224a62f42e85722ecb2813bb1288.jpeg');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Aromatherapy Diffuser</h3>
+                    <div class="product-price">$40</div>
+                    <p class="product-description">A sleek diffuser with the hotel's signature scent for a relaxing ambiance.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Aromatherapy Diffuser" data-price="40">Add to Cart</button>
+                        <button class="buy-now" data-name="Aromatherapy Diffuser" data-price="40">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKkY8Vznnw0a4TE6A7_n06TsBb6GsNApHYcw&s');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Branded Wine Glass Set</h3>
+                    <div class="product-price">$30</div>
+                    <p class="product-description">A set of two elegant wine glasses with the Edingo Inn logo.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Branded Wine Glass Set" data-price="30">Add to Cart</button>
+                        <button class="buy-now" data-name="Branded Wine Glass Set" data-price="30">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://m.media-amazon.com/images/I/91qK0GOX3RL.jpg');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Luxury Bed Throw</h3>
+                    <div class="product-price">$55</div>
+                    <p class="product-description">A soft, decorative throw blanket for cozy evenings, inspired by Edingo Inn's rooms.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Luxury Bed Throw" data-price="55">Add to Cart</button>
+                        <button class="buy-now" data-name="Luxury Bed Throw" data-price="55">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://www.leatherneo.com/cdn/shop/products/MA017.jpg?v=1634860207');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Hotel Journal</h3>
+                    <div class="product-price">$18</div>
+                    <p class="product-description">A leather-bound journal with the Edingo Inn logo, ideal for travel notes.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Hotel Journal" data-price="18">Add to Cart</button>
+                        <button class="buy-now" data-name="Hotel Journal" data-price="18">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTILviooV8ZwDsN4rtdfVWGqivFCLS-rVvZXQ&s');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Signature Tea Blend</h3>
+                    <div class="product-price">$14</div>
+                    <p class="product-description">A tin of the hotel's exclusive tea blend, perfect for a soothing cup.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Signature Tea Blend" data-price="14">Add to Cart</button>
+                        <button class="buy-now" data-name="Signature Tea Blend" data-price="14">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://m.media-amazon.com/images/I/71Gud8xi-tL.jpg');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Engraved Pen Set</h3>
+                    <div class="product-price">$20</div>
+                    <p class="product-description">A set of two pens with the Edingo Inn logo, perfect for business travelers.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Engraved Pen Set" data-price="20">Add to Cart</button>
+                        <button class="buy-now" data-name="Engraved Pen Set" data-price="20">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0b59BczRQ0Ud0P0DkDLLKteoJzt7VcT6O1A&s');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Miniature Hotel Model</h3>
+                    <div class="product-price">$25</div>
+                    <p class="product-description">A decorative miniature of the Edingo Inn building as a keepsake.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Miniature Hotel Model" data-price="25">Add to Cart</button>
+                        <button class="buy-now" data-name="Miniature Hotel Model" data-price="25">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcvI7A6vRzHfDxVeFwcOt1fHku-4KyRvav-g&s');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Scented Sachet Set</h3>
+                    <div class="product-price">$12</div>
+                    <p class="product-description">A set of three sachets with the hotel's signature scent for drawers or closets.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Scented Sachet Set" data-price="12">Add to Cart</button>
+                        <button class="buy-now" data-name="Scented Sachet Set" data-price="12">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://5.imimg.com/data5/ANDROID/Default/2022/12/GR/EZ/FV/19051907/product-jpeg-500x500.jpg');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Branded Sunglasses</h3>
+                    <div class="product-price">$35</div>
+                    <p class="product-description">Stylish sunglasses with the Edingo Inn logo on the side.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Branded Sunglasses" data-price="35">Add to Cart</button>
+                        <button class="buy-now" data-name="Branded Sunglasses" data-price="35">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStHRfeFnaLb8BTDKpuiit3mq1LsMgVs6x2Qw&s');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Luxury Body Scrub</h3>
+                    <div class="product-price">$28</div>
+                    <p class="product-description">A spa-quality body scrub to exfoliate and rejuvenate your skin.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Luxury Body Scrub" data-price="28">Add to Cart</button>
+                        <button class="buy-now" data-name="Luxury Body Scrub" data-price="28">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5xpluK0lIF443ezewfOensUOAaWCN9nkNlQ&s');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Hotel Coaster Set</h3>
+                    <div class="product-price">$10</div>
+                    <p class="product-description">A set of four coasters with the Edingo Inn logo and scenic designs.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Hotel Coaster Set" data-price="10">Add to Cart</button>
+                        <button class="buy-now" data-name="Hotel Coaster Set" data-price="10">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://wovenartandbeyond.com/cdn/shop/files/RedPurpleWhite_eb69442b-2723-463b-ab02-32dd7ffa6803_1024x1024.png?v=1712512902');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Handwoven Scarf</h3>
+                    <div class="product-price">$30</div>
+                    <p class="product-description">A lightweight scarf with subtle hotel branding, reflecting local craftsmanship.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Handwoven Scarf" data-price="30">Add to Cart</button>
+                        <button class="buy-now" data-name="Handwoven Scarf" data-price="30">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4OH83x5f5YsexJeCSArT9t-md31mYQ97Wsg&s');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Travel Pouch Set</h3>
+                    <div class="product-price">$22</div>
+                    <p class="product-description">A set of three pouches for organizing travel essentials, branded with Edingo Inn.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Travel Pouch Set" data-price="22">Add to Cart</button>
+                        <button class="buy-now" data-name="Travel Pouch Set" data-price="22">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_I_a4G4PfkzL1f5JcCEMOZmAxD2myHdsjNw&s');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">Edingo Inn Ornament</h3>
+                    <div class="product-price">$12</div>
+                    <p class="product-description">A holiday ornament shaped like the hotel's logo, ideal for seasonal decor.</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" data-name="Edingo Inn Ornament" data-price="12">Add to Cart</button>
+                        <button class="buy-now" data-name="Edingo Inn Ornament" data-price="12">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <button class="cart-close" id="cartClose">×</button>
+            <h2>Shopping Cart</h2>
+            <div class="cart-items" id="cartItems"></div>
+            <div class="cart-total" id="cartTotal">Total: $0</div>
+            <div class="payment-options">
+                <div class="payment-option" data-method="visa">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa"> Visa
+                </div>
+                <div class="payment-option" data-method="credit-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/MasterCard_Logo.svg" alt="Credit Card"> Credit Card
+                </div>
+                <div class="payment-option" data-method="khalti">
+                    <img src="https://khalti.com/static/img/logo1.png" alt="Khalti"> Khalti Pay
+                </div>
+                <div class="payment-option" data-method="esewa">
+                    <img src="https://esewa.com.np/common/images/esewa_logo.png" alt="eSewa"> eSewa Pay
+                </div>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn">Checkout</button>
+        </div>
+    </div>
+
+    <script>
+        const cart = [];
+        let total = 0;
+
+        const cartModal = document.getElementById('cartModal');
+        const cartClose = document.getElementById('cartClose');
+        const cartItems = document.getElementById('cartItems');
+        const cartTotal = document.getElementById('cartTotal');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', () => {
+                const name = button.getAttribute('data-name');
+                const price = parseFloat(button.getAttribute('data-price'));
+                cart.push({ name, price });
+                total += price;
+                updateCart();
+                cartModal.classList.add('active');
+            });
+        });
+
+        document.querySelectorAll('.buy-now').forEach(button => {
+            button.addEventListener('click', () => {
+                const name = button.getAttribute('data-name');
+                const price = parseFloat(button.getAttribute('data-price'));
+                cart.length = 0; // Clear cart
+                total = 0;
+                cart.push({ name, price });
+                total += price;
+                updateCart();
+                cartModal.classList.add('active');
+            });
+        });
+
+        cartClose.addEventListener('click', () => {
+            cartModal.classList.remove('active');
+        });
+
+        checkoutBtn.addEventListener('click', () => {
+            const selectedMethod = document.querySelector('.payment-option.selected')?.getAttribute('data-method');
+            if (selectedMethod) {
+                alert(`Proceeding to payment with ${selectedMethod} for $${total}`);
+            } else {
+                alert('Please select a payment method.');
+            }
+        });
+
+        document.querySelectorAll('.payment-option').forEach(option => {
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+            });
+        });
+
+        function updateCart() {
+            cartItems.innerHTML = '';
+            cart.forEach(item => {
+                const div = document.createElement('div');
+                div.classList.add('cart-item');
+                div.innerHTML = `<span>${item.name}</span><span>$${item.price}</span>`;
+                cartItems.appendChild(div);
+            });
+            cartTotal.textContent = `Total: $${total}`;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.product-card');
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach((entry, idx) => {
+                    if (entry.isIntersecting) {
+                        // Animation logic: first card left, last right, others bottom
+                        if (idx === 0) {
+                            entry.target.classList.add('animate-left');
+                        } else if (idx === cards.length - 1) {
+                            entry.target.classList.add('animate-right');
+                        } else {
+                            entry.target.classList.add('animate-bottom');
+                        }
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            cards.forEach(card => observer.observe(card));
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel - Gallery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: whitesmoke;
+            min-height: 100vh;
+            color: black;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #aa8453;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #666;
+            font-weight: 300;
+        }
+
+        .gallery-nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 15px 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            background: #aa8453;
+            color: white;
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .gallery-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .gallery-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #aa8453;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .gallery-grid-large {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .gallery-grid-masonry {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            background: #aa8453;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item.tall img {
+            height: 400px;
+        }
+
+        .gallery-item.medium img {
+            height: 320px;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-item .caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: white;
+            padding: 30px 20px 20px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover .caption {
+            transform: translateY(0);
+        }
+
+        .caption h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #aa8453;
+        }
+
+        .caption p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .lightbox img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: none;
+            border: none;
+            color: whitesmoke;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 10px;
+        }
+        h1 {
+    color: #aa8453;
+    text-align: center;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 40px;
+    margin: 20px 0;
+    opacity: 0;
+    transform: translateX(100px);
+    animation: slideInLeft 1s ease-out forwards;
+}
+
+@keyframes slideInLeft {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.logo {
+    width: 90px;
+    height: 90px;
+    display: inline-block;
+    margin: 20px;
+    left:0;
+    position: relative;
+}
+
+header {
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+    url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') no-repeat center center/cover;
+    height: 900px;
+    color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+}
+
+.logo {
+    position: absolute;
+    left: 20px;
+    .logo-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(45deg, #d4af37, #ffd700);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px;
+        font-weight: bold;
+        font-size: 20px;
+        color: #000;
+    }
+}
+
+/* Navbar styles for horizontal row, no bullets, no underline, and #ffd700 hover */
+.header {
+            background-color: whitesmoke;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo img {
+            height: 100px;
+            width: 100px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 14px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #d4af37;
+            transform: scale(1.1);
+        }
+/* Responsive: stack vertically on small screens */
+@media (max-width: 768px) {
+    .navbar-nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+    </style>
+</head>
+<body>
+  <div id="global-loader" style="position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+    <div style="display:flex;gap:10px;margin-bottom:10px;">
+      <div style="width:15px;height:15px;background:#ccc;border-radius:50%;animation:fade 1.5s infinite;"></div>
+      <div style="width:15px;height:15px;background:#ccc;border-radius:50%;animation:fade 1.5s infinite 0.3s;"></div>
+      <div style="width:15px;height:15px;background:#ccc;border-radius:50%;animation:fade 1.5s infinite 0.6s;"></div>
+    </div>
+    <div style="font-size:48px;color:#fff;text-transform:uppercase;letter-spacing:5px;font-weight:bold;">LOADING</div>
+    <img src="/img/footer.logo.png" alt="Footer Logo" style="width:100px;margin-top:30px;">
+  </div>
+  <style>
+    @keyframes fade {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+  </style>
+    <img src="/img/logo-nav.png" alt="logo" class="logo">
+    <nav class="navbar">
+        <div class="container">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="index.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="about.html">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="news.html">News</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="contact.html">Contact</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="gallery.html">Gallery</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    <div class="container">
+        <div class="header">
+            <h1>Hotel Edingo Inn</h1>
+            <p>Experience Luxury & Comfort Through Our Gallery</p>
+        </div>
+
+        <div class="gallery-nav">
+            <button class="nav-btn active" onclick="showSection('rooms')">Rooms & Suites</button>
+            <button class="nav-btn" onclick="showSection('exterior')">Hotel Exterior</button>
+            <button class="nav-btn" onclick="showSection('dining')">Dining & Food</button>
+            <button class="nav-btn" onclick="showSection('amenities')">Amenities</button>
+            <button class="nav-btn" onclick="showSection('activities')">Activities</button>
+            <button class="nav-btn" onclick="showSection('events')">Events</button>
+            <button class="nav-btn" onclick="showSection('experience')">Guest Experience</button>
+            <button class="nav-btn" onclick="showSection('virtual')">Virtual Tour</button>
+        </div>
+
+        <!-- Rooms & Suites Section -->
+        <div id="rooms" class="gallery-section active">
+            <h2 class="section-title">Rooms & Suites</h2>
+            <div class="gallery-grid-large">
+                <div class="gallery-item tall" onclick="openLightbox('https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1200&h=800&fit=crop" alt="Presidential Suite">
+                    <div class="caption">
+                        <h3>Presidential Suite</h3>
+                        <p>Spacious luxury suite with panoramic city views, separate living area, and premium amenities</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=1200&h=800&fit=crop" alt="Deluxe Ocean View">
+                    <div class="caption">
+                        <h3>Deluxe Ocean View</h3>
+                        <p>Elegant room with breathtaking ocean views and private balcony</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1560184897-ae75f418493e?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1560184897-ae75f418493e?q=80&w=1200&h=800&fit=crop" alt="Executive Suite">
+                    <div class="caption">
+                        <h3>Executive Suite</h3>
+                        <p>Business-class suite with work area and premium business amenities</p>
+                    </div>
+                </div>
+                <div class="gallery-item medium" onclick="openLightbox('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200&h=800&fit=crop" alt="Luxury Bathroom">
+                    <div class="caption">
+                        <h3>Luxury Bathroom</h3>
+                        <p>Marble bathroom with rainfall shower, soaking tub, and premium toiletries</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1616594039964-ae9021a400a0?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?q=80&w=1200&h=800&fit=crop" alt="Family Suite">
+                    <div class="caption">
+                        <h3>Family Suite</h3>
+                        <p>Spacious family accommodation with connecting rooms and kid-friendly amenities</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1631049552240-59c37f38802b?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1631049552240-59c37f38802b?q=80&w=1200&h=800&fit=crop" alt="Honeymoon Suite">
+                    <div class="caption">
+                        <h3>Honeymoon Suite</h3>
+                        <p>Romantic suite with jacuzzi, champagne service, and rose petal turndown</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://image-tc.galaxy.tf/wijpeg-z81wyibyu71eclkb7w5y4kt6/standard-deluxe-twin-2_wide.jpg?crop=0%2C142%2C1600%2C900" alt="Standard Deluxe">
+                    <div class="caption">
+                        <h3>Standard Deluxe</h3>
+                        <p>Comfortable room with modern amenities and city view</p>
+                    </div>
+                </div>
+                <div class="gallery-item medium" onclick="openLightbox('https://images.unsplash.com/photo-1566195992011-5f6b21e539aa?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1566195992011-5f6b21e539aa?q=80&w=1200&h=800&fit=crop" alt="Room Balcony">
+                    <div class="caption">
+                        <h3>Private Balcony</h3>
+                        <p>Enjoy morning coffee and stunning views from your private balcony</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hotel Exterior Section -->
+        <div id="exterior" class="gallery-section">
+            <h2 class="section-title">Hotel Exterior & Surroundings</h2>
+            <div class="gallery-grid-masonry">
+                <div class="gallery-item tall" onclick="openLightbox('https://images.unsplash.com/photo-1564501049412-61c2a3083791?q=80&w=1200&h=900&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?q=80&w=1200&h=900&fit=crop" alt="Hotel Facade Day">
+                    <div class="caption">
+                        <h3>Grand Facade - Daylight</h3>
+                        <p>Impressive 12-story architecture showcasing contemporary luxury design</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=1200&h=800&fit=crop" alt="Hotel Night Illumination">
+                    <div class="caption">
+                        <h3>Evening Illumination</h3>
+                        <p>Stunning LED lighting creating a magical nighttime atmosphere</p>
+                    </div>
+                </div>
+                <div class="gallery-item medium" onclick="openLightbox('https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=1200&h=800&fit=crop" alt="Landscaped Gardens">
+                    <div class="caption">
+                        <h3>Botanical Gardens</h3>
+                        <p>Award-winning landscaped gardens with tropical plants and water features</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200&h=800&fit=crop" alt="Main Entrance">
+                    <div class="caption">
+                        <h3>Grand Entrance</h3>
+                        <p>Marble-clad entrance with 24/7 valet and doorman service</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1439066615861-d1af74d74000?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1439066615861-d1af74d74000?q=80&w=1200&h=800&fit=crop" alt="Sunset View">
+                    <div class="caption">
+                        <h3>Golden Hour View</h3>
+                        <p>Breathtaking sunset views from our scenic location</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1200&h=800&fit=crop" alt="Architecture Detail">
+                    <div class="caption">
+                        <h3>Architectural Details</h3>
+                        <p>Intricate design elements showcasing modern luxury aesthetics</p>
+                    </div>
+                </div>
+                <div class="gallery-item medium" onclick="openLightbox('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1200&h=800&fit=crop" alt="Driveway">
+                    <div class="caption">
+                        <h3>VIP Driveway</h3>
+                        <p>Elegant circular driveway with premium vehicle access</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dining & Food Section -->
+        <div id="dining" class="gallery-section">
+            <h2 class="section-title">Dining & Food</h2>
+            <div class="gallery-grid-large">
+                <div class="gallery-item tall" onclick="openLightbox('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1200&h=900&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1200&h=900&fit=crop" alt="Fine Dining Restaurant">
+                    <div class="caption">
+                        <h3>Grandview Fine Dining</h3>
+                        <p>Michelin-starred restaurant with panoramic city views and award-winning cuisine</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1567521464027-f127ff144326?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1567521464027-f127ff144326?q=80&w=1200&h=800&fit=crop" alt="Signature Dish">
+                    <div class="caption">
+                        <h3>Chef's Signature Platter</h3>
+                        <p>Artfully crafted wagyu beef with truffle reduction by our executive chef</p>
+                    </div>
+                </div>
+                <div class="gallery-item medium" onclick="openLightbox('https://images.unsplash.com/photo-1572448862527-d3c904757de6?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1572448862527-d3c904757de6?q=80&w=1200&h=800&fit=crop" alt="Rooftop Bar">
+                    <div class="caption">
+                        <h3>Sky Lounge Bar</h3>
+                        <p>30th-floor rooftop bar with craft cocktails and 360-degree skyline views</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1551218808-94e220e084d2?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?q=80&w=1200&h=800&fit=crop" alt="International Buffet">
+                    <div class="caption">
+                        <h3>International Buffet</h3>
+                        <p>Extensive breakfast and dinner buffet featuring global cuisines</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1200&h=800&fit=crop" alt="Sushi Bar">
+                    <div class="caption">
+                        <h3>Sakura Sushi Bar</h3>
+                        <p>Authentic Japanese sushi prepared by master sushi chefs from Tokyo</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1578474846511-04ba529f0b88?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1578474846511-04ba529f0b88?q=80&w=1200&h=800&fit=crop" alt="Wine Cellar">
+                    <div class="caption">
+                        <h3>Premium Wine Cellar</h3>
+                        <p>Curated collection of 500+ wines from renowned vineyards worldwide</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=1200&h=800&fit=crop" alt="Dessert Selection">
+                    <div class="caption">
+                        <h3>Artisan Desserts</h3>
+                        <p>Handcrafted desserts by our award-winning pastry chef</p>
+                    </div>
+                </div>
+                <div class="gallery-item medium" onclick="openLightbox('https://images.unsplash.com/photo-1481833761820-0509d3217039?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1481833761820-0509d3217039?q=80&w=1200&h=800&fit=crop" alt="Cafe Terrace">
+                    <div class="caption">
+                        <h3>Garden Café Terrace</h3>
+                        <p>Outdoor dining terrace with fresh pastries and artisan coffee</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Amenities Section -->
+        <div id="amenities" class="gallery-section">
+            <h2 class="section-title">Amenities</h2>
+            <div class="gallery-grid-masonry">
+                <div class="gallery-item tall" onclick="openLightbox('https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=1200&h=900&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=1200&h=900&fit=crop" alt="Infinity Pool">
+                    <div class="caption">
+                        <h3>Rooftop Infinity Pool</h3>
+                        <p>25-meter infinity pool with stunning panoramic views and poolside bar service</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=1200&h=800&fit=crop" alt="Luxury Spa">
+                    <div class="caption">
+                        <h3>Serenity Spa</h3>
+                        <p>5-star spa with 12 treatment rooms, steam rooms, and relaxation lounges</p>
+                    </div>
+                </div>
+                <div class="gallery-item medium" onclick="openLightbox('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=1200&h=800&fit=crop" alt="Fitness Center">
+                    <div class="caption">
+                        <h3>24/7 Fitness Center</h3>
+                        <p>State-of-the-art Technogym equipment with personal trainers available</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?q=80&w=1200&h=800&fit=crop" alt="Grand Ballroom">
+                    <div class="caption">
+                        <h3>Grand Ballroom</h3>
+                        <p>Elegant 500-capacity ballroom with crystal chandeliers and AV equipment</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=1200&h=800&fit=crop" alt="Business Center">
+                    <div class="caption">
+                        <h3>Executive Business Center</h3>
+                        <p>Modern business facilities with high-speed internet and meeting rooms</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1200&h=800&fit=crop" alt="Kids Club">
+                    <div class="caption">
+                        <h3>Adventure Kids Club</h3>
+                        <p>Supervised children's club with games, activities, and dedicated playground</p>
+                    </div>
+                </div>
+                <div class="gallery-item medium" onclick="openLightbox('https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1200&h=800&fit=crop" alt="Tennis Court">
+                    <div class="caption">
+                        <h3>Championship Tennis Court</h3>
+                        <p>Professional-grade tennis court with equipment rental and lessons available</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1519752441410-d3ca70ecb937?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1519752441410-d3ca70ecb937?q=80&w=1200&h=800&fit=crop" alt="Rooftop Yoga Studio">
+                    <div class="caption">
+                        <h3>Rooftop Yoga Studio</h3>
+                        <p>Outdoor yoga sessions with serene views and professional instructors</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activities Section -->
+        <div id="activities" class="gallery-section">
+            <h2 class="section-title">Activities & Services</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1520637836862-4d197d17c0a4?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1520637836862-4d197d17c0a4?q=80&w=1200&h=800&fit=crop" alt="Beach Bonfire">
+                    <div class="caption">
+                        <h3>Beach Bonfire</h3>
+                        <p>Evening bonfire sessions with music and refreshments</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=1200&h=800&fit=crop" alt="Water Sports">
+                    <div class="caption">
+                        <h3>Water Sports</h3>
+                        <p>Exciting water activities including kayaking and snorkeling</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1200&h=800&fit=crop" alt="Room Service">
+                    <div class="caption">
+                        <h3>24/7 Room Service</h3>
+                        <p>Premium room service available around the clock</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1200&h=800&fit=crop" alt="Valet">
+                    <div class="caption">
+                        <h3>Valet Services</h3>
+                        <p>Professional valet parking and concierge services</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Events Section -->
+        <div id="events" class="gallery-section">
+            <h2 class="section-title">Events & Celebrations</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1519167758481-83f29b8ae434?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1519167758481-83f29b8ae434?q=80&w=1200&h=800&fit=crop" alt="Wedding">
+                    <div class="caption">
+                        <h3>Dream Weddings</h3>
+                        <p>Fairytale wedding ceremonies in our beautiful ballroom</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80&w=1200&h=800&fit=crop" alt="Corporate Event">
+                    <div class="caption">
+                        <h3>Corporate Events</h3>
+                        <p>Professional event spaces for business gatherings and conferences</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=1200&h=800&fit=crop" alt="Party">
+                    <div class="caption">
+                        <h3>Private Parties</h3>
+                        <p>Celebrate special occasions in style with our event planning team</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1558008258-3256797b43f3?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1558008258-3256797b43f3?q=80&w=1200&h=800&fit=crop" alt="Banquet">
+                    <div class="caption">
+                        <h3>Banquet Hall</h3>
+                        <p>Elegant banquet facilities for memorable celebrations</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Guest Experience Section -->
+        <div id="experience" class="gallery-section">
+            <h2 class="section-title">Guest Experience</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=1200&h=800&fit=crop" alt="Happy Guests">
+                    <div class="caption">
+                        <h3>Happy Families</h3>
+                        <p>Creating memorable experiences for families and loved ones</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1552679011-6e8234d1f7d7?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1552679011-6e8234d1f7d7?q=80&w=1200&h=800&fit=crop" alt="Business Travelers">
+                    <div class="caption">
+                        <h3>Business Travelers</h3>
+                        <p>Professional services tailored for business guests</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?q=80&w=1200&h=800&fit=crop" alt="Staff Service">
+                    <div class="caption">
+                        <h3>Exceptional Service</h3>
+                        <p>Our dedicated staff ensuring every guest feels welcomed</p>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=1200&h=800&fit=crop')">
+                    <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=1200&h=800&fit=crop" alt="Welcome">
+                    <div class="caption">
+                        <h3>Warm Welcome</h3>
+                        <p>Greeting guests with warmth and professional hospitality</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Virtual Tour Section -->
+        <div id="virtual" class="gallery-section">
+            <h2 class="section-title">Virtual Tour & Videos</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <div class="video-container">
+                        <div class="video-placeholder">
+                            <span>Hotel Walkthrough Video</span>
+                            <button class="play-btn" onclick="playVideo()">▶</button>
+                        </div>
+                    </div>
+                    <div class="caption">
+                        <h3>Virtual Hotel Tour</h3>
+                        <p>Take a complete virtual tour of our hotel facilities</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="video-container">
+                        <div class="video-placeholder">
+                            <span>Room Experience Video</span>
+                            <button class="play-btn" onclick="playVideo()">▶</button>
+                        </div>
+                    </div>
+                    <div class="caption">
+                        <h3>Room Experience</h3>
+                        <p>Experience our luxury rooms and suites virtually</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="video-container">
+                        <div class="video-placeholder">
+                            <span>Dining Experience</span>
+                            <button class="play-btn" onclick="playVideo()">▶</button>
+                        </div>
+                    </div>
+                    <div class="caption">
+                        <h3>Culinary Journey</h3>
+                        <p>Discover our restaurants and culinary offerings</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="video-container">
+                        <div class="video-placeholder">
+                            <span>Amenities Showcase</span>
+                            <button class="play-btn" onclick="playVideo()">▶</button>
+                        </div>
+                    </div>
+                    <div class="caption">
+                        <h3>Amenities Overview</h3>
+                        <p>Explore our world-class amenities and facilities</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox">
+        <div class="lightbox-content">
+            <button class="lightbox-close" onclick="closeLightbox()">×</button>
+            <img id="lightbox-img" src="" alt="">
+        </div>
+    </div>
+
+    <script>
+        // Show section based on button click
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.gallery-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Remove active class from all nav buttons
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Open lightbox with clicked image
+        function openLightbox(imageSrc) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            
+            lightboxImg.src = imageSrc;
+            lightbox.classList.add('active');
+            
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close lightbox
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+            
+            // Restore body scroll
+            document.body.style.overflow = 'auto';
+        }
+
+        // Placeholder for video playback
+        function playVideo() {
+            alert('Video player would open here. In a real implementation, this would launch a video player or modal with the actual video content.');
+        }
+
+        // Close lightbox when clicking outside the image
+        document.getElementById('lightbox').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeLightbox();
+            }
+        });
+
+        // Close lightbox with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+
+        // Smooth scrolling for navigation buttons
+        document.querySelectorAll('.nav-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const sectionId = this.getAttribute('onclick').match(/'([^']+)'/)[1];
+                document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                var loader = document.getElementById('global-loader');
+                if (loader) loader.style.display = 'none';
+            }, 1200);
+        });
+    </script>
+</body>
+</html>
