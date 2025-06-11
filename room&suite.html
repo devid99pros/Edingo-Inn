@@ -1,757 +1,550 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rooms & Suites - Hotel Edingo Inn</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-         header {
-            background-color: #fff;
-            padding: 20px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+document.addEventListener('DOMContentLoaded', () => {
+    // Calendar Functionality
+    const checkInInput = document.getElementById('checkInInput');
+    const checkOutInput = document.getElementById('checkOutInput');
+    const calendarOverlay = document.getElementById('calendarOverlay');
+    const closeBtn = document.getElementById('closeBtn');
+    const modalTitle = document.getElementById('modalTitle');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const currentMonthGrid = document.getElementById('currentMonthGrid');
+    const nextMonthGrid = document.getElementById('nextMonthGrid');
+    const currentMonthHeader = document.getElementById('currentMonthHeader');
+    const nextMonthHeader = document.getElementById('nextMonthHeader');
+    const selectedCheckIn = document.getElementById('selectedCheckIn');
+    const selectedCheckOut = document.getElementById('selectedCheckOut');
+    const confirmBtn = document.getElementById('confirmBtn');
+
+    let currentDate = new Date();
+    let selectedCheckInDate = null;
+    let selectedCheckOutDate = null;
+    let selectingCheckIn = true;
+    let displayedMonth = new Date(currentDate.getFullYear(), currentDate.getMonth());
+
+    function formatDate(date) {
+        return date.toISOString().split('T')[0];
+    }
+
+    function generateCalendar(month, year, container) {
+        container.innerHTML = '';
+        const firstDay = new Date(year, month).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const prevMonthDays = firstDay === 0 ? 6 : firstDay - 1;
+        const prevMonthLastDay = new Date(year, month, 0).getDate();
+
+        for (let i = prevMonthDays; i > 0; i--) {
+            const day = document.createElement('div');
+            day.classList.add('calendar-day', 'other-month');
+            day.textContent = prevMonthLastDay - i + 1;
+            container.appendChild(day);
         }
 
-        .logo img {
-            height: 100px;
-            width: 100px;
+        for (let i = 1; i <= daysInMonth; i++) {
+            const day = document.createElement('div');
+            day.classList.add('calendar-day');
+            day.textContent = i;
+            const date = new Date(year, month, i);
+            if (date.toDateString() === new Date().toDateString()) {
+                day.classList.add('today');
+            }
+            if (selectedCheckInDate && date.toDateString() === selectedCheckInDate.toDateString()) {
+                day.classList.add('selected');
+            }
+            if (selectedCheckOutDate && date.toDateString() === selectedCheckOutDate.toDateString()) {
+                day.classList.add('selected');
+            }
+            if (selectedCheckInDate && selectedCheckOutDate && date > selectedCheckInDate && date < selectedCheckOutDate) {
+                day.classList.add('in-range');
+            }
+            day.addEventListener('click', () => selectDate(date));
+            container.appendChild(day);
         }
 
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 20px;
+        const totalCells = prevMonthDays + daysInMonth;
+        const nextMonthDays = (7 - (totalCells % 7)) % 7;
+        for (let i = 1; i <= nextMonthDays; i++) {
+            const day = document.createElement('div');
+            day.classList.add('calendar-day', 'other-month');
+            day.textContent = i;
+            container.appendChild(day);
         }
+    }
 
-        nav ul li a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            text-transform: uppercase;
-            font-size: 14px;
-            transition: color 0.3s ease, transform 0.3s ease;
-        }
+    function updateCalendars() {
+        const nextMonth = new Date(displayedMonth.getFullYear(), displayedMonth.getMonth() + 1);
+        currentMonthHeader.textContent = displayedMonth.toLocaleString('default', { month: 'long', year: 'numeric' });
+        nextMonthHeader.textContent = nextMonth.toLocaleString('default', { month: 'long', year: 'numeric' });
+        generateCalendar(displayedMonth.getMonth(), displayedMonth.getFullYear(), currentMonthGrid);
+        generateCalendar(nextMonth.getMonth(), nextMonth.getFullYear(), nextMonthGrid);
+    }
 
-        nav ul li a:hover {
-            color: #d4af37;
-            transform: scale(1.1);
-        }
-        /* Hero Section Styles */
-        .hero-section {
-            background-color: #f5f5f5;
-            position: relative;
-            padding: 6rem 0;
-            text-align: center;
-        }
-        .decorative-text {
-            font-size: 1.25rem;
-            color: #d4af37;
-            font-style: italic;
-            margin-bottom: 1rem;
-            letter-spacing: 2px;
-        }
-        .hero-title {
-            font-size: 3.5rem;
-            font-weight: 700;
-            color: #333;
-        }
-        .breadcrumb {
-            margin-top: 1rem;
-            color: #666;
-        }
-        .breadcrumb a {
-            color: #666;
-            text-decoration: none;
-        }
-        .breadcrumb a:hover {
-            text-decoration: underline;
-        }
-
-        /* Room Card Styles (Shared for Room Grid and Similar Rooms) */
-        .room-card {
-            position: relative;
-            border: 1px solid #e5e7eb;
-            overflow: hidden;
-            opacity: 0;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Different animations for each room type */
-        .room-card:nth-child(1) { /* Double Room */
-            transform: translateX(-100px);
-        }
-        .room-card:nth-child(2) { /* Triple Room */
-            transform: translateY(100px);
-        }
-        .room-card:nth-child(3) { /* Deluxe Room */
-            transform: translateX(100px);
-        }
-        .room-card:nth-child(4) { /* Junior Suite */
-            transform: translateY(-100px);
-        }
-        .room-card:nth-child(5) { /* Family Room */
-            transform: scale(0.8);
-        }
-
-        .room-card.visible {
-            opacity: 1;
-            transform: translate(0) scale(1);
-        }
-
-        .room-image {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .room-card:hover .room-image {
-            transform: scale(1.1) rotate(1deg);
-        }
-
-        .room-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
-            opacity: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 2rem;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            transform: translateY(20px);
-        }
-
-        .room-card:hover .room-overlay {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .room-title {
-            color: #fff;
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            font-family: 'Poppins', sans-serif;
-            transform: translateY(20px);
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
-        }
-
-        .room-card:hover .room-title {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .room-price {
-            color: #fff;
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-            font-family: 'Poppins', sans-serif;
-            transform: translateY(20px);
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
-        }
-
-        .room-card:hover .room-price {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .room-amenities {
-            color: #fff;
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            font-size: 1rem;
-            font-family: 'Poppins', sans-serif;
-            transform: translateY(20px);
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
-        }
-
-        .room-card:hover .room-amenities {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .book-now-btn {
-            background: transparent;
-            border: 2px solid #fff;
-            color: #fff;
-            padding: 0.5rem 1.5rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            font-family: 'Poppins', sans-serif;
-            transform: translateY(20px);
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.4s;
-        }
-
-        .room-card:hover .book-now-btn {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .book-now-btn:hover {
-            background: #aa8453;
-            border-color: #aa8453;
-            color: #fff;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(170, 132, 83, 0.3);
-        }
-
-        /* Icons Section Styles */
-        .amenities-section {
-            text-align: center;
-            padding: 2rem 0;
-        }
-        .amenity-icon {
-            font-size: 2rem;
-            color: #666;
-            margin: 0 1rem;
-            transition: color 0.3s ease;
-        }
-        .amenity-icon:hover {
-            color: #aa8453;
-        }
-
-        /* Around the Room Section Styles */
-        .around-room-section {
-            padding: 4rem 0;
-        }
-        .around-room-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #333;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        .around-room-label {
-            text-align: center;
-            margin-top: 0.5rem;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1rem;
-            font-weight: 500;
-            color: #333;
-        }
-
-        /* Carousel Styles for Similar Rooms */
-        .similar-rooms-carousel {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-        }
-        .carousel-slide {
-            display: flex;
-            width: fit-content; /* Adjust width to fit all cards */
-            transition: transform 1s ease-in-out;
-        }
-        .carousel-slide .room-card {
-            flex: 0 0 33.33%; /* 3 cards visible at a time */
-            max-width: 33.33%;
-        }
-
-        /* footer section*/
-        footer {
-            background-color: #1a1a1a;
-            color: #fff;
-            padding: 50px;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .footer-column {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .footer-column h3 {
-            font-size: 18px;
-            margin-bottom: 15px;
-            color: #d4af37;
-        }
-
-        .footer-column p,
-        .footer-column a {
-            color: #ccc;
-            font-size: 14px;
-            line-height: 1.6;
-            text-decoration: none;
-        }
-
-        .footer-column a:hover {
-            color: #d4af37;
-        }
-
-        .footer-column ul {
-            list-style: none;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: footerLinksUp 1s 1.2s cubic-bezier(0.4,0,0.2,1) forwards;
-        }
-        @keyframes footerLinksUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
+    function selectDate(date) {
+        if (selectingCheckIn) {
+            selectedCheckInDate = date;
+            selectedCheckOutDate = null;
+            selectingCheckIn = false;
+            modalTitle.textContent = 'Select Check-out Date';
+        } else {
+            if (date <= selectedCheckInDate) {
+                selectedCheckInDate = date;
+                selectedCheckOutDate = null;
+                selectingCheckIn = false;
+                modalTitle.textContent = 'Select Check-out Date';
+            } else {
+                selectedCheckOutDate = date;
+                selectingCheckIn = true;
+                modalTitle.textContent = 'Select Check-in Date';
             }
         }
-        .footer-column ul li {
-            margin-bottom: 10px;
-            transition: transform 0.2s, color 0.2s;
+        updateCalendars();
+        selectedCheckIn.textContent = selectedCheckInDate ? formatDate(selectedCheckInDate) : 'Not selected';
+        selectedCheckOut.textContent = selectedCheckOutDate ? formatDate(selectedCheckOutDate) : 'Not selected';
+    }
+
+    checkInInput.addEventListener('click', () => {
+        selectingCheckIn = true;
+        modalTitle.textContent = 'Select Check-in Date';
+        calendarOverlay.style.display = 'block';
+        updateCalendars();
+    });
+
+    checkOutInput.addEventListener('click', () => {
+        selectingCheckIn = false;
+        modalTitle.textContent = 'Select Check-out Date';
+        calendarOverlay.style.display = 'block';
+        updateCalendars();
+    });
+
+    closeBtn.addEventListener('click', () => {
+        calendarOverlay.style.display = 'none';
+    });
+
+    prevBtn.addEventListener('click', () => {
+        displayedMonth.setMonth(displayedMonth.getMonth() - 1);
+        updateCalendars();
+    });
+
+    nextBtn.addEventListener('click', () => {
+        displayedMonth.setMonth(displayedMonth.getMonth() + 1);
+        updateCalendars();
+    });
+
+    confirmBtn.addEventListener('click', () => {
+        if (selectedCheckInDate) checkInInput.value = formatDate(selectedCheckInDate);
+        if (selectedCheckOutDate) checkOutInput.value = formatDate(selectedCheckOutDate);
+        calendarOverlay.style.display = 'none';
+    });
+
+    // Guest Counter Functionality
+    const guestsInput = document.getElementById('guestsInput');
+    const guestsDropdown = document.getElementById('guestsDropdown');
+    const roomsMinus = document.getElementById('roomsMinus');
+    const roomsPlus = document.getElementById('roomsPlus');
+    const roomsCount = document.getElementById('roomsCount');
+    const adultsMinus = document.getElementById('adultsMinus');
+    const adultsPlus = document.getElementById('adultsPlus');
+    const adultsCount = document.getElementById('adultsCount');
+    const childrenMinus = document.getElementById('childrenMinus');
+    const childrenPlus = document.getElementById('childrenPlus');
+    const childrenCount = document.getElementById('childrenCount');
+
+    let rooms = 1;
+    let adults = 1;
+    let children = 0;
+
+    function updateGuestsInput() {
+        guestsInput.value = `${rooms} Room${rooms > 1 ? 's' : ''}, ${adults} Adult${adults > 1 ? 's' : ''}, ${children} Child${children !== 1 ? 'ren' : ''}`;
+        roomsMinus.disabled = rooms <= 1;
+        adultsMinus.disabled = adults <= 1;
+        childrenMinus.disabled = children <= 0;
+    }
+
+    guestsInput.addEventListener('click', () => {
+        guestsDropdown.classList.toggle('show');
+    });
+
+    roomsMinus.addEventListener('click', () => {
+        if (rooms > 1) rooms--;
+        roomsCount.textContent = rooms;
+        updateGuestsInput();
+    });
+
+    roomsPlus.addEventListener('click', () => {
+        rooms++;
+        roomsCount.textContent = rooms;
+        updateGuestsInput();
+    });
+
+    adultsMinus.addEventListener('click', () => {
+        if (adults > 1) adults--;
+        adultsCount.textContent = adults;
+        updateGuestsInput();
+    });
+
+    adultsPlus.addEventListener('click', () => {
+        adults++;
+        adultsCount.textContent = adults;
+        updateGuestsInput();
+    });
+
+    childrenMinus.addEventListener('click', () => {
+        if (children > 0) children--;
+        childrenCount.textContent = children;
+        updateGuestsInput();
+    });
+
+    childrenPlus.addEventListener('click', () => {
+        children++;
+        childrenCount.textContent = children;
+        updateGuestsInput();
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!guestsInput.contains(e.target) && !guestsDropdown.contains(e.target)) {
+            guestsDropdown.classList.remove('show');
         }
-        .footer-column ul li:hover {
-            color: #d4af37;
-            transform: translateX(8px) scale(1.05);
+    });
+
+    updateGuestsInput();
+});
+    // Scroll effect for navigation bar
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            const topBar = document.getElementById('topBar');
+            const scrollPosition = window.scrollY;
+            
+            if (scrollPosition > 50) {
+                navbar.classList.remove('transparent');
+                navbar.classList.add('scrolled');
+                topBar.classList.add('hidden');
+            } else {
+                navbar.classList.remove('scrolled');
+                navbar.classList.add('transparent');
+                topBar.classList.remove('hidden');
+            }
+        });
+        
+    document.addEventListener('DOMContentLoaded', () => {
+        const bookingContainer = document.querySelector('.booking-container');
+        setTimeout(() => bookingContainer.classList.add('visible'), 100);
+    });
+
+
+        // Search Modal Functionality
+        const searchIcon = document.getElementById('searchIcon');
+        const searchModal = document.getElementById('searchModal');
+        const searchClose = document.getElementById('searchClose');
+        const searchInput = document.getElementById('searchInput');
+
+        // Open search modal
+        searchIcon.addEventListener('click', function() {
+            searchModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => {
+                searchInput.focus();
+            }, 400);
+        });
+
+        // Close search modal
+        searchClose.addEventListener('click', function() {
+            searchModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && searchModal.classList.contains('active')) {
+                searchModal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Close modal when clicking outside
+        searchModal.addEventListener('click', function(e) {
+            if (e.target === searchModal) {
+                searchModal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Add smooth scrolling behavior
+        document.documentElement.style.scrollBehavior = 'smooth';
+
+    const offerCards = document.querySelectorAll('.offer-card');
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const offerCards = document.querySelectorAll('.offer-card');
+
+  function revealOnScroll() {
+    const triggerBottom = window.innerHeight * 0.92;
+    offerCards.forEach(card => {
+      const cardTop = card.getBoundingClientRect().top;
+      if (cardTop < triggerBottom) {
+        card.classList.add('visible');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', revealOnScroll);
+  revealOnScroll(); // Initial check
+});
+document.addEventListener('DOMContentLoaded', () => {
+  // ...existing code for offer cards...
+
+  const luxuryImages = document.querySelectorAll('.image-large, .image-small-top, .image-small-bottom');
+
+  function revealLuxuryImagesOnScroll() {
+    const triggerBottom = window.innerHeight * 0.92;
+    luxuryImages.forEach(img => {
+      const imgTop = img.getBoundingClientRect().top;
+      if (imgTop < triggerBottom) {
+        img.classList.add('visible');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', revealLuxuryImagesOnScroll);
+  revealLuxuryImagesOnScroll(); // Initial check
+});
+document.addEventListener('DOMContentLoaded', () => {
+    const titles = document.querySelectorAll(
+        '.modal-title, .subtitle, .text-title, .header-title, .room-title, .main-title'
+    );
+    titles.forEach(title => title.classList.add('animated-title'));
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.2 });
+    titles.forEach(title => observer.observe(title));
+    
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Existing code (calendar, guest counter, etc.) remains unchanged
+
+    // Menu header slideshow
+    const menuHeader = document.querySelector('.menu-header');
+    if (menuHeader) {
+        const images = [
+            'https://images.pexels.com/photos/842571/pexels-photo-842571.jpeg?cs=srgb&dl=pexels-valeriya-842571.jpg&fm=jpg',
+            'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80',
+            'https://images.unsplash.com/photo-1559329007-40df8a9345d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80',
+            'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80',
+        ];
+
+        // Create slideshow container
+        const slideshow = document.createElement('div');
+        slideshow.classList.add('menu-slideshow');
+        images.forEach((img, index) => {
+            const slide = document.createElement('div');
+            slide.classList.add('menu-slide');
+            slide.style.backgroundImage = `url(${img})`;
+            if (index === 0) slide.classList.add('active');
+            slideshow.appendChild(slide);
+        });
+        menuHeader.insertBefore(slideshow, menuHeader.firstChild);
+
+        // Slideshow logic
+        let currentSlide = 0;
+        function nextSlide() {
+            const slides = slideshow.querySelectorAll('.menu-slide');
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % images.length;
+            slides[currentSlide].classList.add('active');
         }
+        setInterval(nextSlide, 3000);
+    }
 
-        .social-icons {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
+        // Video content here.....//
+ const videoThumbnail = document.getElementById('videoThumbnail');
+        const mainVideo = document.getElementById('mainVideo');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+
+        // Handle thumbnail click
+        videoThumbnail.addEventListener('click', function() {
+            // Show loading overlay
+            loadingOverlay.style.display = 'flex';
+            
+            // Hide thumbnail
+            videoThumbnail.style.display = 'none';
+            
+            // Show and play video
+            mainVideo.style.display = 'block';
+            
+            // Simulate loading time (remove this in production)
+            setTimeout(() => {
+                loadingOverlay.style.display = 'none';
+                mainVideo.play().catch(e => {
+                    console.log('Video play failed:', e);
+                    // Fallback: just hide loading overlay
+                    loadingOverlay.style.display = 'none';
+                });
+            }, 1000);
+        });
+
+        // Handle video end - show thumbnail again
+        mainVideo.addEventListener('ended', function() {
+            mainVideo.style.display = 'none';
+            videoThumbnail.style.display = 'flex';
+        });
+
+        // Handle video error
+        mainVideo.addEventListener('error', function() {
+            loadingOverlay.style.display = 'none';
+            videoThumbnail.style.display = 'flex';
+            alert('Video could not be loaded. Please check the video URL.');
+        });
+
+});
+// Team Grid Animation
+document.addEventListener('DOMContentLoaded', () => {
+    const teamGrid = document.querySelector('.team-grid');
+    const teamGridOuter = document.querySelector('.team-grid-outer');
+    if (!teamGrid || !teamGridOuter) return;
+
+    let scrollAmount = 0;
+    const speed = 1.5;
+
+    // Clone the team members for infinite scroll
+    const teamMembers = teamGrid.querySelectorAll('.team-member');
+    teamMembers.forEach(member => {
+        const clone = member.cloneNode(true);
+        teamGrid.appendChild(clone);
+    });
+
+    // Set initial styles
+    teamGrid.style.display = 'flex';
+    teamGrid.style.gap = '2rem';
+    teamGrid.style.width = 'max-content';
+    teamGridOuter.style.overflow = 'hidden';
+
+    function autoScroll() {
+        scrollAmount += speed;
+        if (scrollAmount >= teamGrid.scrollWidth / 2) {
+            scrollAmount = 0;
+            teamGrid.style.transition = 'none';
+            teamGridOuter.scrollLeft = 0;
+            teamGrid.offsetHeight; // Force reflow
+            teamGrid.style.transition = '';
         }
+        teamGridOuter.scrollLeft = scrollAmount;
+        requestAnimationFrame(autoScroll);
+    }
 
-        .social-icons a {
-            color: #fff;
-            font-size: 18px;
+    // Start the animation
+    autoScroll();
+});
+// experice section animation
+ document.addEventListener('DOMContentLoaded', () => {
+            const statsSection = document.querySelector('.stats-section');
+            const statItems = document.querySelectorAll('.stat-item');
+            const statNumbers = document.querySelectorAll('.stat-number');
+
+            // Function to animate number counting
+            function animateCount(element, target, duration) {
+                let start = 0;
+                const increment = target / (duration / 16); // ~60fps
+                let current = 0;
+                const interval = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(interval);
+                    }
+                    element.textContent = Math.round(current);
+                }, 16);
+            }
+
+            // Intersection Observer to trigger animations on scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        statItems.forEach(item => item.classList.add('visible'));
+
+                        statNumbers.forEach(number => {
+                            const target = parseInt(number.getAttribute('data-target'));
+                            animateCount(number, target, 2000); // 2s duration
+                        });
+
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            observer.observe(statsSection);
+        });
+          window.addEventListener('load', () => {
+            const contactWrapper = document.getElementById('contactWrapper');
+            setTimeout(() => {
+                contactWrapper.classList.add('visible');
+            }, 100);
+        });
+
+        // Form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const btn = document.querySelector('.submit-btn');
+            const originalText = btn.textContent;
+            
+            btn.textContent = 'Sending...';
+            btn.style.opacity = '0.7';
+            
+            setTimeout(() => {
+                btn.textContent = 'Message Sent!';
+                btn.style.background = 'linear-gradient(45deg, #4CAF50, #45a049)';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = 'linear-gradient(45deg, #d4b896, #c9a876)';
+                    btn.style.opacity = '1';
+                    document.getElementById('contactForm').reset();
+                }, 2000);
+            }, 1000);
+        });
+
+// Stats Counter Animation
+function animateCount(element, target, duration) {
+    let start = 0;
+    const increment = target / (duration / 16); // 60fps
+    const timer = setInterval(() => {
+        start += increment;
+        if (start >= target) {
+            element.textContent = target;
+            clearInterval(timer);
+        } else {
+            element.textContent = Math.floor(start);
         }
+    }, 16);
+}
 
-        .social-icons a:hover {
-            color: #d4af37;
-        }
-
-        .subscribe input {
-            padding: 10px;
-            width: 100%;
-            margin-bottom: 10px;
-            border: none;
-            border-radius: 5px;
-        }
-
-        .subscribe button {
-            background-color: #d4af37;
-            border: none;
-            padding: 10px;
-            color: #fff;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding: 20px;
-            background-color: #111;
-            color: #ccc;
-            font-size: 14px;
-        }
-    </style>
-</head>
-<body class="bg-gray-100 font-sans">
-    <div id="global-loader" style="position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-        <div style="display:flex;gap:10px;margin-bottom:10px;">
-            <div style="width:15px;height:15px;background:#ccc;border-radius:50%;animation:fade 1.5s infinite;"></div>
-            <div style="width:15px;height:15px;background:#ccc;border-radius:50%;animation:fade 1.5s infinite 0.3s;"></div>
-            <div style="width:15px;height:15px;background:#ccc;border-radius:50%;animation:fade 1.5s infinite 0.6s;"></div>
-        </div>
-        <div style="font-size:48px;color:#fff;text-transform:uppercase;letter-spacing:5px;font-weight:bold;">LOADING</div>
-        <img src="/img/footer.logo.png" alt="Footer Logo" style="width:100px;margin-top:30px;">
-    </div>
-    <header>
-        <div class="logo">
-            <img src="/img/logo-nav.png" alt="Edingo Inn Logo">
-        </div>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About Us</a></li>
-                <li><a href="service.html">Services</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="gallery.html">Gallery</a></li>
-                <li><a href="news.html">News</a></li>
-            </ul>
-        </nav>
-    </header><!-- Hero Section -->
-    <section class="hero-section">
-        <div class="decorative-text">HOTEL EDINGO ROOMS</div>
-        <h1 class="hero-title">Luxury Rooms & Suites</h1>
-        <nav class="breadcrumb">
-            <a href="index.html">Home</a> > <span>Rooms</span>
-        </nav>  
-    </section>
-
-    <!-- Rooms Section -->
-    <section class="py-16 px-4">
-        <div class="container mx-auto">
-            <!-- First Row: Double, Triple, Deluxe -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-                <!-- Double Room (Side) -->
-                <div class="room-card md:col-span-1">
-                    <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=2070&auto=format&fit=crop" alt="Double Room" class="room-image">
-                    <div class="room-overlay">
-                        <h3 class="room-title">Double Room</h3>
-                        <p class="room-price">$299/Night</p>
-                        <div class="room-amenities">
-                            <i class="fas fa-bed"></i>
-                            <i class="fas fa-tv"></i>
-                            <i class="fas fa-wifi"></i>
-                        </div>
-                        <button class="book-now-btn">Book Now</button>
-                    </div>
-                </div>
-
-                <!-- Triple Room (Middle, Wider) -->
-                <div class="room-card md:col-span-2">
-                    <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=2070&auto=format&fit=crop" alt="Triple Room" class="room-image">
-                    <div class="room-overlay">
-                        <h3 class="room-title">Triple Room</h3>
-                        <p class="room-price">$399/Night</p>
-                        <div class="room-amenities">
-                            <i class="fas fa-bed"></i>
-                            <i class="fas fa-tv"></i>
-                            <i class="fas fa-wifi"></i>
-                        </div>
-                        <button class="book-now-btn">Book Now</button>
-                    </div>
-                </div>
-
-                <!-- Deluxe Room (Side) -->
-                <div class="room-card md:col-span-1">
-                    <img src="https://images.unsplash.com/photo-1591088398332-8a7791972843?q=80&w=2070&auto=format&fit=crop" alt="Deluxe Room" class="room-image">
-                    <div class="room-overlay">
-                        <h3 class="room-title">Deluxe Room</h3>
-                        <p class="room-price">$499/Night</p>
-                        <div class="room-amenities">
-                            <i class="fas fa-bed"></i>
-                            <i class="fas fa-tv"></i>
-                            <i class="fas fa-wifi"></i>
-                        </div>
-                        <button class="book-now-btn">Book Now</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Second Row: Junior Suite, Family Room -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Junior Suite -->
-                <div class="room-card">
-                    <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=2074&auto=format&fit=crop" alt="Junior Suite" class="room-image">
-                    <div class="room-overlay">
-                        <h3 class="room-title">Junior Suite</h3>
-                        <p class="room-price">$599/Night</p>
-                        <div class="room-amenities">
-                            <i class="fas fa-bed"></i>
-                            <i class="fas fa-tv"></i>
-                            <i class="fas fa-wifi"></i>
-                        </div>
-                        <button class="book-now-btn">Book Now</button>
-                    </div>
-                </div>
-
-                <!-- Family Room -->
-                <div class="room-card">
-                    <img src="https://images.unsplash.com/photo-1590490359683-658d3d23f972?q=80&w=2074&auto=format&fit=crop" alt="Family Room" class="room-image">
-                    <div class="room-overlay">
-                        <h3 class="room-title">Family Room</h3>
-                        <p class="room-price">$899/Night</p>
-                        <div class="room-amenities">
-                            <i class="fas fa-bed"></i>
-                            <i class="fas fa-tv"></i>
-                            <i class="fas fa-wifi"></i>
-                        </div>
-                        <button class="book-now-btn">Book Now</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Amenities Icons Section -->
-    <section class="amenities-section">
-        <div class="container mx-auto flex justify-center gap-6">
-            <i class="fas fa-bed amenity-icon" title="Comfortable Beds"></i>
-            <i class="fas fa-tv amenity-icon" title="Smart TV"></i>
-            <i class="fas fa-wifi amenity-icon" title="Free Wi-Fi"></i>
-            <i class="fas fa-shower amenity-icon" title="Luxury Bathroom"></i>
-            <i class="fas fa-coffee amenity-icon" title="Coffee Maker"></i>
-        </div>
-    </section>
-
-    <!-- Around the Room Section -->
-    <section class="around-room-section">
-        <h2 class="around-room-title">Around the Room</h2>
-        <div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-            <!-- Image 1: Private Bedroom -->
-            <div class="room-card">
-                <img src="https://images.unsplash.com/photo-1740446568792-647ddb3f6f9a?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Private Bedroom" class="room-image">
-                <p class="around-room-label">Private Bedroom</p>
-            </div>
-            <!-- Image 2: Spa Room -->
-            <div class="room-card">
-                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop" alt="Spa Room" class="room-image">
-                <p class="around-room-label">Spa Room</p>
-            </div>
-            <!-- Image 3: Gym Room -->
-            <div class="room-card">
-                <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop" alt="Gym Room" class="room-image">
-                <p class="around-room-label">Gym Room</p>
-            </div>
-            <!-- Image 4: Hotel Lounge -->
-            <div class="room-card">
-                <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=2070&auto=format&fit=crop" alt="Hotel Lounge" class="room-image">
-                <p class="around-room-label">Hotel Lounge</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Similar Rooms Section (Carousel) -->
-    <section class="py-16 px-4">
-        <h2 class="around-room-title">Similar Rooms</h2>
-        <div class="container mx-auto">
-            <div class="similar-rooms-carousel">
-                <div class="carousel-slide">
-                    <!-- Double Room -->
-                    <div class="room-card">
-                        <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=2070&auto=format&fit=crop" alt="Double Room" class="room-image">
-                        <div class="room-overlay">
-                            <h3 class="room-title">Double Room</h3>
-                            <p class="room-price">$299/Night</p>
-                            <div class="room-amenities">
-                                <i class="fas fa-bed"></i>
-                                <i class="fas fa-tv"></i>
-                                <i class="fas fa-wifi"></i>
-                            </div>
-                            <button class="book-now-btn">Book Now</button>
-                        </div>
-                    </div>
-
-                    <!-- Junior Suite -->
-                    <div class="room-card">
-                        <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=2074&auto=format&fit=crop" alt="Junior Suite" class="room-image">
-                        <div class="room-overlay">
-                            <h3 class="room-title">Junior Suite</h3>
-                            <p class="room-price">$599/Night</p>
-                            <div class="room-amenities">
-                                <i class="fas fa-bed"></i>
-                                <i class="fas fa-tv"></i>
-                                <i class="fas fa-wifi"></i>
-                            </div>
-                            <button class="book-now-btn">Book Now</button>
-                        </div>
-                    </div>
-
-                    <!-- Family Room -->
-                    <div class="room-card">
-                        <img src="https://images.unsplash.com/photo-1590490359683-658d3d23f972?q=80&w=2074&auto=format&fit=crop" alt="Family Room" class="room-image">
-                        <div class="room-overlay">
-                            <h3 class="room-title">Family Room</h3>
-                            <p class="room-price">$899/Night</p>
-                            <div class="room-amenities">
-                                <i class="fas fa-bed"></i>
-                                <i class="fas fa-tv"></i>
-                                <i class="fas fa-wifi"></i>
-                            </div>
-                            <button class="book-now-btn">Book Now</button>
-                        </div>
-                    </div>
-
-                    <!-- Deluxe Room -->
-                    <div class="room-card">
-                        <img src="https://images.unsplash.com/photo-1591088398332-8a7791972843?q=80&w=2070&auto=format&fit=crop" alt="Deluxe Room" class="room-image">
-                        <div class="room-overlay">
-                            <h3 class="room-title">Deluxe Room</h3>
-                            <p class="room-price">$499/Night</p>
-                            <div class="room-amenities">
-                                <i class="fas fa-bed"></i>
-                                <i class="fas fa-tv"></i>
-                                <i class="fas fa-wifi"></i>
-                            </div>
-                            <button class="book-now-btn">Book Now</button>
-                        </div>
-                    </div>
-
-                    <!-- Skyline Suite -->
-                    <div class="room-card">
-                        <img src="https://images.unsplash.com/photo-1616046229478-9901c5536a45?q=80&w=2070&auto=format&fit=crop" alt="Skyline Suite" class="room-image">
-                        <div class="room-overlay">
-                            <h3 class="room-title">Skyline Suite</h3>
-                            <p class="room-price">$699/Night</p>
-                            <div class="room-amenities">
-                                <i class="fas fa-bed"></i>
-                                <i class="fas fa-tv"></i>
-                                <i class="fas fa-wifi"></i>
-                            </div>
-                            <button class="book-now-btn">Book Now</button>
-                        </div>
-                    </div>
-
-                    <!-- Triple Room -->
-                    <div class="room-card">
-                        <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=2070&auto=format&fit=crop" alt="Triple Room" class="room-image">
-                        <div class="room-overlay">
-                            <h3 class="room-title">Triple Room</h3>
-                            <p class="room-price">$399/Night</p>
-                            <div class="room-amenities">
-                                <i class="fas fa-bed"></i>
-                                <i class="fas fa-tv"></i>
-                                <i class="fas fa-wifi"></i>
-                            </div>
-                            <button class="book-now-btn">Book Now</button>
-                        </div>
-                    </div>
-
-                    <!-- Duplicate for seamless looping -->
-                    <div class="room-card">
-                        <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=2070&auto=format&fit=crop" alt="Double Room" class="room-image">
-                        <div class="room-overlay">
-                            <h3 class="room-title">Double Room</h3>
-                            <p class="room-price">$299/Night</p>
-                            <div class="room-amenities">
-                                <i class="fas fa-bed"></i>
-                                <i class="fas fa-tv"></i>
-                                <i class="fas fa-wifi"></i>
-                            </div>
-                            <button class="book-now-btn">Book Now</button>
-                        </div>
-                    </div>
-
-                    <div class="room-card">
-                        <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=2074&auto=format&fit=crop" alt="Junior Suite" class="room-image">
-                        <div class="room-overlay">
-                            <h3 class="room-title">Junior Suite</h3>
-                            <p class="room-price">$599/Night</p>
-                            <div class="room-amenities">
-                                <i class="fas fa-bed"></i>
-                                <i class="fas fa-tv"></i>
-                                <i class="fas fa-wifi"></i>
-                            </div>
-                            <button class="book-now-btn">Book Now</button>
-                        </div>
-                    </div>
-
-                    <div class="room-card">
-                        <img src="https://images.unsplash.com/photo-1590490359683-658d3d23f972?q=80&w=2074&auto=format&fit=crop" alt="Family Room" class="room-image">
-                        <div class="room-overlay">
-                            <h3 class="room-title">Family Room</h3>
-                            <p class="room-price">$899/Night</p>
-                            <div class="room-amenities">
-                                <i class="fas fa-bed"></i>
-                                <i class="fas fa-tv"></i>
-                                <i class="fas fa-wifi"></i>
-                            </div>
-                            <button class="book-now-btn">Book Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <script>
-        // Intersection Observer for scroll animation
-        const roomCards = document.querySelectorAll('.room-card');
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
+// Initialize stats counter when element is in view
+const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const statNumbers = entry.target.querySelectorAll('.stat-number');
+            statNumbers.forEach(stat => {
+                const target = parseInt(stat.getAttribute('data-target'));
+                animateCount(stat, target, 2000); // 2 seconds duration
             });
-        }, {
-            threshold: 0.3
-        });
-
-        roomCards.forEach(card => {
-            observer.observe(card);
-        });
-
-        // Carousel Auto-Swipe for Similar Rooms
-        const carouselSlide = document.querySelector('.carousel-slide');
-        const totalRooms = 6; // Total unique rooms
-        let currentIndex = 0;
-
-        function updateCarousel() {
-            currentIndex++;
-            if (currentIndex >= totalRooms) {
-                currentIndex = 0;
-                carouselSlide.style.transition = 'none'; // Disable transition for instant reset
-                carouselSlide.style.transform = `translateX(0%)`;
-                // Force reflow to restart animation
-                void carouselSlide.offsetWidth;
-                carouselSlide.style.transition = 'transform 1s ease-in-out';
-            }
-            carouselSlide.style.transform = `translateX(-${(currentIndex * 100) / 3}%)`; // 3 cards visible at a time
+            statsObserver.unobserve(entry.target);
         }
+    });
+}, {
+    threshold: 0.5
+});
 
-        updateCarousel(); // Initial update
-        setInterval(updateCarousel, 3000); // Auto-swipe every 3 seconds
+// Observe the stats container
+document.addEventListener('DOMContentLoaded', () => {
+    const statsContainer = document.querySelector('.stats-container');
+    if (statsContainer) {
+        statsObserver.observe(statsContainer);
+    }
+});
 
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                var loader = document.getElementById('global-loader');
-                if (loader) loader.style.display = 'none';
-            }, 1200);
-        });
-    </script>
-</body>
-<footer>
-        <div class="footer-column">
-            <h3>Edingo Inn</h3>
-            <p>Feel free to reach out if you want to collaborate with us, or chat.</p>
-            <div class="subscribe">
-                <input type="email" placeholder="Your Email">
-                <button><i class="fas fa-paper-plane"></i></button>
-            </div>
-            <h3>Follow Us</h3>
-            <div class="social-icons">
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-tiktok"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-            </div>
-        </div>
-        <div class="footer-column">
-            <h3>Service</h3>
-            <ul>
-                <li><a href="#">Store Directory</a></li>
-                <li><a href="#">Top Hotels</a></li>
-                <li><a href="#">Quick Links</a></li>
-                <li><a href="#">Important Links</a></li>
-                <li><a href="#">Insights</a></li>
-                <li><a href="#">Knowledge Center</a></li>
-            </ul>
-        </div>
-        <div class="footer-column">
-            <h3>Company</h3>
-            <ul class="footer-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About Us</a></li>
-                <li><a href="service.html">Services</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="gallery.html">Gallery</a></li>
-                <li><a href="news.html">News</a></li>
-            </ul>
-          
-        </div>
-        <div class="footer-column">
-            <h3>New York</h3>
-            <p>2948 Royal Ln, Mesa, New Jersey 456463</p>
-            <p>(000)222-0000</p>
-            <p>info@yourwebsite.com</p>
-            <h3>London</h3>
-            <p>1901 Thornrich Cir, Shiloh, Hawaii 81063</p>
-            <p>(229)555-0109</p>
-            <p>info@yourwebsite.com</p>
-        </div>
-    </footer>
-</html>
+        
